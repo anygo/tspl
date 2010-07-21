@@ -40,11 +40,40 @@ BinaryHeap<Type>::BinaryHeap( Type *array, int length )
 }
 
 template <typename Type>
+BinaryHeap<Type>::BinaryHeap( const BinaryHeap<Type> &rhs )
+{
+    currentSize = rhs.currentSize;
+    capacity = rhs.capacity;
+
+    elements = new Type[capacity];
+    for( int i=1; i<=currentSize; ++i )
+        elements[i] = rhs.elements[i];
+}
+
+template <typename Type>
 BinaryHeap<Type>::~BinaryHeap()
 {
     currentSize = 0;
     capacity = INITSIZE;
     delete []elements;
+}
+
+
+/**
+ * Overload copy assignment operation.
+ */
+template <typename Type>
+BinaryHeap<Type>& BinaryHeap<Type>::operator=( const BinaryHeap<Type> &rhs )
+{
+    currentSize = rhs.currentSize;
+    capacity = rhs.capacity;
+
+    delete []elements;
+    elements = new Type[capacity];
+    for( int i=1; i<=currentSize; ++i )
+        elements[i] = rhs.elements[i];
+
+    return *this;
 }
 
 
@@ -65,6 +94,16 @@ template <typename Type>
 inline void BinaryHeap<Type>::makeEmpty()
 {
     currentSize = 0;
+}
+
+
+/**
+ * Return size of the heap.
+ */
+template <typename Type>
+inline int BinaryHeap<Type>::size() const
+{
+    return currentSize;
 }
 
 

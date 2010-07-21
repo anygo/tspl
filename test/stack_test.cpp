@@ -30,15 +30,18 @@ int main()
     s.getTop( stu );
     cout << stu.first << "\t" << stu.second << endl;
 
+    Stack< pair<int, string> > s1(s), s2;
+    s2 = s1;
+
     cout << endl;
-    while( !s.isEmpty() )
+    while( !s2.isEmpty() )
     {
-        s.pop( stu );
+        s2.pop( stu );
         cout << stu.first << "\t" << stu.second <<endl;
     }
     cout << endl;
 
-    s.getTop( stu );
+    s2.getTop( stu );
     cout << stu.first << "\t" << stu.second <<endl;
 
     cout << endl;

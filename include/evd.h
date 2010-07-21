@@ -87,6 +87,7 @@ namespace itlab
 		void cdiv( Real xr, Real xi, Real yr, Real yi );
 		void hqr2();
 		void others();
+		void normalized();
 
 	};
 	// class EVD

@@ -39,13 +39,13 @@ namespace itlab
 
         explicit BinaryHeap( int maxSize = INITSIZE );
         BinaryHeap( Type *array, int length );
+        BinaryHeap( const BinaryHeap<Type> &rhs );
         ~BinaryHeap();
-
-//        BinaryHeap( const BinaryHeap<Type> &rhs );
-//        BinaryHeap<Type>& operator=( const BinaryHeap<Type> &rhs );
+        BinaryHeap<Type>& operator=( const BinaryHeap<Type> &rhs );
 
         inline bool isEmpty() const;
         inline void makeEmpty();
+        inline int size() const;
 
         inline void insert( const Type &x );
         inline void findMin( Type &x );

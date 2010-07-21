@@ -882,6 +882,28 @@ void EVD<Real>::dec( const Matrix<Real> &A )
         // reduce Hessenberg to real Schur form
         hqr2();
     }
+
+    normalized();
+}
+
+
+/**
+ * Making normalization and sorting.
+ */
+template <typename Real>
+inline void EVD<Real>::normalized()
+{
+    Real norm2;
+    for( int j=0; j<n; ++j )
+    {
+        norm2 = 0;
+        for( int i=0; i<n; ++i )
+            norm2 += V[i][j]*V[i][j];
+        norm2 = sqrt(norm2);
+
+        for( int i=0; i<n; ++i )
+            V[i][j] /= norm2;
+    }
 }
 
 

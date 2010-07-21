@@ -80,6 +80,19 @@ inline void Queue<Type>::enqueue( const Type &x )
  * Pop an element from the queue.
  */
 template <typename Type>
+inline void Queue<Type>::dequeue()
+{
+    if( !isEmpty() )
+    {
+        LinkNode<Type> *p = front;
+        front = front->next;
+        delete p;
+    }
+    else
+        handleUnderflow();
+}
+
+template <typename Type>
 inline void Queue<Type>::dequeue( Type &x )
 {
     if( !isEmpty() )

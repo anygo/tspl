@@ -24,9 +24,38 @@ HashTable<Object, Key>::HashTable( int size ) : tableSize(size)
 }
 
 template <typename Object, typename Key>
+HashTable<Object, Key>::HashTable( const HashTable<Object, Key> &rhs )
+{
+    tableSize = rhs.tableSize;
+    currentSize = rhs.currentSize;
+
+    array = new HashEntry[tableSize];
+    for( int i=0; i<tableSize; ++i )
+        array[i] = rhs.array[i];
+}
+
+template <typename Object, typename Key>
 HashTable<Object, Key>::~HashTable()
 {
     delete []array;
+}
+
+
+/**
+ * Overload copy assignment operation.
+ */
+template <typename Object, typename Key>
+HashTable<Object, Key>& HashTable<Object, Key>::operator=( const HashTable<Object, Key> &rhs )
+{
+    tableSize = rhs.tableSize;
+    currentSize = rhs.currentSize;
+
+    delete []array;
+    array = new HashEntry[tableSize];
+    for( int i=0; i<tableSize; ++i )
+        array[i] = rhs.array[i];
+
+    return *this;
 }
 
 

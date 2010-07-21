@@ -22,11 +22,40 @@ Stack<Type>::Stack( int maxSize ) : top (-1), capacity(maxSize)
 };
 
 template <typename Type>
+Stack<Type>::Stack( const Stack<Type> &rhs )
+{
+    top = rhs.top;
+    capacity = rhs.capacity;
+
+    elements = new Type[capacity];
+    for( int i=0; i<=top; ++i )
+        elements[i] = rhs.elements[i];
+}
+
+template <typename Type>
 Stack<Type>::~Stack()
 {
     top = -1;
     capacity = INITSIZE;
     delete []elements;
+}
+
+
+/**
+ * Overload copy assignment operation.
+ */
+template <typename Type>
+Stack<Type>& Stack<Type>::operator=( const Stack<Type> &rhs )
+{
+    top = rhs.top;
+    capacity = rhs.capacity;
+
+    delete []elements;
+    elements = new Type[capacity];
+    for( int i=0; i<=top; ++i )
+        elements[i] = rhs.elements[i];
+
+    return *this;
 }
 
 
@@ -65,6 +94,15 @@ inline void Stack<Type>::push( const Type &x )
 /**
  * Pop an element out of stack.
  */
+template <typename Type>
+inline void Stack<Type>::pop()
+{
+    if( !isEmpty() )
+        top--;
+    else
+        handleUnderflow();
+};
+
 template <typename Type>
 inline void Stack<Type>::pop( Type &x )
 {
