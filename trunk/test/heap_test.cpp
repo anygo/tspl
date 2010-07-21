@@ -25,11 +25,12 @@ int main()
     for( int i=1; i<=25; ++i )
         h.insert( r.random( 1, 100 ) );
 
-    while( !h.isEmpty() )
+    BinaryHeap<int> h1(h);
+    while( !h1.isEmpty() )
     {
-        h.findMin( x );
+        h1.findMin( x );
         cout << "  " << x << "\t";
-        h.deleteMin();
+        h1.deleteMin();
     }
     cout << endl;
 
@@ -41,18 +42,19 @@ int main()
     }
     cout << endl;
 
-    BinaryHeap<int> hh( a, 40 );
-    while( !hh.isEmpty() )
+    BinaryHeap<int> hh( a, 40 ), hh1;
+    hh1 = hh;
+    while( !hh1.isEmpty() )
     {
-        hh.deleteMin( x );
+        hh1.deleteMin( x );
         cout << "  " << x << "\t";
     }
     cout << endl;
 
     for( int i=1; i<=5; ++i )
-        h.insert( r.random( 1, 100 ) );
-    h.makeEmpty();
-    h.deleteMin();
+        h1.insert( r.random( 1, 100 ) );
+    h1.makeEmpty();
+    h1.deleteMin();
 
     cout << endl << endl;
     return 0;

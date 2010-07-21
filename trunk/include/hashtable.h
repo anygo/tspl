@@ -33,10 +33,9 @@ namespace itlab
     public:
 
         explicit HashTable( int size=7 );
+        HashTable( const HashTable<Object, Key> &rhs );
         ~HashTable();
-
-//        HashTable( const HashTable<Object, Key> &rhs );
-//        HashTable<Object, Key>& operator=( const HashTable<Object, Key> &rhs );
+        HashTable<Object, Key>& operator=( const HashTable<Object, Key> &rhs );
 
         void makeEmpty();
 

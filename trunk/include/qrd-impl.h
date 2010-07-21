@@ -175,7 +175,7 @@ Vector<Real> QRD<Real>::solve( const Vector<Real> &b )
 
     Vector<Real> x = b;
 
-    // compute Y = transpose(Q)*b
+    // compute y = transpose(Q)*b
     for( int k=0; k<n; ++k )
     {
         Real s = 0;
@@ -187,7 +187,7 @@ Vector<Real> QRD<Real>::solve( const Vector<Real> &b )
             x[i] += s*QR[i][k];
     }
 
-    // solve R*X = Y;
+    // solve R*x = y;
     for( int k=n-1; k>=0; --k )
     {
         x[k] /= RDiag[k];
@@ -195,7 +195,7 @@ Vector<Real> QRD<Real>::solve( const Vector<Real> &b )
             x[i] -= x[k]*QR[i][k];
     }
 
-    // return n x nx portion of X
+    // return n x nx portion of x
     Vector<Real> x_(n);
     for( int i=0; i<n; ++i )
         x_[i] = x[i];

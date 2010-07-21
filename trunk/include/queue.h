@@ -56,6 +56,7 @@ namespace itlab
         inline void makeEmpty();
 
         inline void enqueue( const Type &x );
+        inline void dequeue();
         inline void dequeue( Type &x );
         inline void getFront( Type &x );
 

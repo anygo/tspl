@@ -37,15 +37,17 @@ int main()
     }
     cout << endl;
 
+    HashTable<Student, int> ht1(ht), ht2;
     for( int i=0; i<N; ++i )
-        if( ht.remove( y[i], stu ) )
+        if( ht1.remove( y[i], stu ) )
             cout << "Removing success: " << stu;
         else
             cout << "Removing failure." << endl;
     cout << endl;
 
+    ht2 = ht1;
     for( int i=0; i<N; ++i )
-        if( ht.search( x[i], stu ) )
+        if( ht2.search( x[i], stu ) )
             cout << "Searching success: " << stu;
         else
             cout << "Searching failure." << endl;

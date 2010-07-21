@@ -32,15 +32,15 @@ namespace itlab
     public:
 
         explicit Stack( int maxSize = INITSIZE );
+        Stack( const Stack<Type> &rhs );
         ~Stack();
-
-//        Stack( const Stack<Type> & );
-//        Stack<Type>& operator=( const Stack<Type> & );
+        Stack<Type>& operator=( const Stack<Type> &rhs );
 
         inline bool isEmpty() const;
         inline void makeEmpty();
 
         inline void push( const Type &x );
+        inline void pop();
         inline void pop( Type &x );
         inline void getTop( Type &x );
 

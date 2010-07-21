@@ -199,7 +199,7 @@ inline bool LUD<Real>::isNonsingular()
  * to the number of rows in A.
  */
 template <typename Real>
-Vector<Real> LUD<Real>::solve(const Vector<Real> &b)
+Vector<Real> LUD<Real>::solve( const Vector<Real> &b )
 {
     // dimensions: A is mxn, X is nxk, B is mxk
     if( b.dim() != m )
@@ -215,7 +215,7 @@ Vector<Real> LUD<Real>::solve(const Vector<Real> &b)
         for( int i=k+1; i<n; ++i )
             x[i] -= x[k]*LU[i][k];
 
-    // solve U*X = Y;
+    // solve U*x = y;
     for( int k=n-1; k>=0; --k )
     {
         x[k] /= LU[k][k];
@@ -231,7 +231,7 @@ Vector<Real> LUD<Real>::solve(const Vector<Real> &b)
  * Solve A*X = B
  */
 template <typename Real>
-Matrix<Real> LUD<Real>::solve(const Matrix<Real> &B)
+Matrix<Real> LUD<Real>::solve( const Matrix<Real> &B )
 {
     // dimensions: A is mxn, X is nxk, B is mxk
     if( B.rows() != m )

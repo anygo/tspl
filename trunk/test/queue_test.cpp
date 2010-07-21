@@ -46,6 +46,7 @@ int main()
          << stu.department << endl;
 
     cout << endl;
+    q.dequeue();
     while( !q.isEmpty() )
     {
         q.dequeue( stu );
