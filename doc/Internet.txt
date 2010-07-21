@@ -1,0 +1,7 @@
+http://code.google.com/p/tspl/
+
+http://my.oschina.net/zmjerry
+
+
+Thank you very! The algorithm of SVD which you proposed can obtain the same results as the function in Matlab 7.0.
+You have done a very good job!
