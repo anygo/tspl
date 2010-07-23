@@ -7,7 +7,7 @@
  * sorting, selection sorting, insertion sorting, quick sorting, merging
  * sorting, and heap sorting.
  *
- * Zhang Ming, 2010-07
+ * Zhang Ming, 2010-07, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

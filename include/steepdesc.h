@@ -7,7 +7,7 @@
  * in one dimension or multidimension. Inexact line search algorithm is used
  * to get the step size in each iteration.
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

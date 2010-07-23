@@ -6,7 +6,7 @@
  * The defualt initial size of the stack is set to 20. If the elements number
  * exceed initial size, then it will be extended by a factor of 2.
  *
- * Zhang Ming, 2009-10
+ * Zhang Ming, 2009-10, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -36,13 +36,13 @@ namespace itlab
         ~Stack();
         Stack<Type>& operator=( const Stack<Type> &rhs );
 
-        inline bool isEmpty() const;
-        inline void makeEmpty();
+        bool isEmpty() const;
+        void makeEmpty();
 
-        inline void push( const Type &x );
-        inline void pop();
-        inline void pop( Type &x );
-        inline void getTop( Type &x );
+        void push( const Type &x );
+        void pop();
+        void pop( Type &x );
+        void getTop( Type &x );
 
     private:
 
@@ -52,7 +52,7 @@ namespace itlab
         Type *elements;
 
         void handleOverflow();
-        inline void handleUnderflow();
+        void handleUnderflow();
 
     };
     // class Stack

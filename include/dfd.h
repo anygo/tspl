@@ -6,7 +6,7 @@
  * This is a base class for FIR and IIR filter design. It contains the design
  * specifies and some universal parameters of filter.
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

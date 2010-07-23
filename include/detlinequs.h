@@ -1,7 +1,7 @@
 /*****************************************************************************
  *                               detequs.h
  *
- * Function template for solving deterministic  linear equations.
+ * Function template for solving deterministic linear equations.
  *
  * For a n-by-n Coefficient Matrix A and n-by-1 Constant Vector b, Gauss
  * elimination method can solve the equations Ax=b. But the decomposition
@@ -10,7 +10,7 @@
  * decomposition is the better choice; if A is a tridiagonal matrix, then
  * the Forward Elimination and Backward Substitution maybe the best choice.
  *
- * Zhang Ming, 2010-07, Xi'an Jiaotong Univerty.
+ * Zhang Ming, 2010-07, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

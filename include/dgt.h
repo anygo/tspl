@@ -18,7 +18,7 @@
  * original signal. So you'd better let dM can be deviede evenly by  the
  * original signal length "Ls".
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

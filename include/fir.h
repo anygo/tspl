@@ -15,7 +15,7 @@
  * The length of filter( filter's order plus one ) are multiples of 4, which
  * is the least number(L=4n) satisfying the design specifies.
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

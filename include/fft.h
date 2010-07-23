@@ -8,12 +8,12 @@
  * If you need execute FFT many times in your program, it's not a good idear
  * for using this interface because of losing efficiency.
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
-#ifndef FFTW_INTERFACE_H
-#define FFTW_INTERFACE_H
+#ifndef FFT_H
+#define FFT_H
 
 
 #include <complex>
@@ -138,4 +138,4 @@ namespace itlab
 
 
 #endif
-// FFTW_INTERFACE_H
+// FFT_H

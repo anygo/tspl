@@ -9,7 +9,7 @@
  * To distinguish with the "dwt" (discrete wavelet transform), we call this
  * file as "bwt", but in fact, it should be dyadic wavelet transform.                                                                                 *
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

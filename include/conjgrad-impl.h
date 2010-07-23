@@ -3,7 +3,7 @@
  *
  * Implementation for ConjGrad class.
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -94,7 +94,7 @@ void ConjGrad<Dtype, Ftype>::optimize( Ftype &func, Vector<Dtype> &x0,
  * Get the optimum point.
  */
 template <typename Dtype, typename Ftype>
-Vector<Dtype> ConjGrad<Dtype, Ftype>::getOptValue() const
+inline Vector<Dtype> ConjGrad<Dtype, Ftype>::getOptValue() const
 {
     return xOpt;
 }
@@ -104,7 +104,7 @@ Vector<Dtype> ConjGrad<Dtype, Ftype>::getOptValue() const
  * Get the norm of gradient in each iteration.
  */
 template <typename Dtype, typename Ftype>
-Vector<Dtype> ConjGrad<Dtype, Ftype>::getGradNorm() const
+inline Vector<Dtype> ConjGrad<Dtype, Ftype>::getGradNorm() const
 {
     return gradNorm;
 }
@@ -114,7 +114,7 @@ Vector<Dtype> ConjGrad<Dtype, Ftype>::getGradNorm() const
  * Get the minimum value of objective function.
  */
 template <typename Dtype, typename Ftype>
-Dtype ConjGrad<Dtype, Ftype>::getFuncMin() const
+inline Dtype ConjGrad<Dtype, Ftype>::getFuncMin() const
 {
     return fMin;
 }
@@ -124,7 +124,7 @@ Dtype ConjGrad<Dtype, Ftype>::getFuncMin() const
  * Get the iteration number.
  */
 template <typename Dtype, typename Ftype>
-int ConjGrad<Dtype, Ftype>::getItrNum() const
+inline int ConjGrad<Dtype, Ftype>::getItrNum() const
 {
     return gradNorm.dim()-1;
 }

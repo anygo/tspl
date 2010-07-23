@@ -3,13 +3,12 @@
  *
  * Allocate and delete two dimension array (matrix).
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
 #ifndef MATRIXALLOCATE_H
 #define MATRIXALLOCATE_H
-
 
 
 namespace itlab

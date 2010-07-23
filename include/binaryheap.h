@@ -12,7 +12,7 @@
  * The defualt initial size of the heap is set to 20. If the elements number
  * exceed initial size, then it will be extended by a factor of 2.
  *
- * Zhang Ming, 2009-10
+ * Zhang Ming, 2009-10, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -43,14 +43,14 @@ namespace itlab
         ~BinaryHeap();
         BinaryHeap<Type>& operator=( const BinaryHeap<Type> &rhs );
 
-        inline bool isEmpty() const;
-        inline void makeEmpty();
-        inline int size() const;
+        bool isEmpty() const;
+        void makeEmpty();
+        int size() const;
 
-        inline void insert( const Type &x );
-        inline void findMin( Type &x );
-        inline void deleteMin();
-        inline void deleteMin( Type &minItem );
+        void insert( const Type &x );
+        void findMin( Type &x );
+        void deleteMin();
+        void deleteMin( Type &minItem );
 
     private:
 
@@ -63,7 +63,7 @@ namespace itlab
         void filterUp( int hole );
 
         void handleOverflow();
-        inline void handleUnderflow();
+        void handleUnderflow();
 
     };
     // class BinaryHeap

@@ -7,7 +7,7 @@
  * "pm", this class can find the best parameter "pm" in the meaning of least
  * mean-square error.
  *
- * Zhang Ming, 2010-04
+ * Zhang Ming, 2010-04, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

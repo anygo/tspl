@@ -9,7 +9,7 @@
  * "back", "push front", "push back", "pop front", "pop back", "insert",
  * "erase" and so on.
  *
- * Zhang Ming, 2009-10
+ * Zhang Ming, 2009-10, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -57,17 +57,17 @@ namespace itlab
         ListItr( Node<Type> *p );
         ~ListItr();
 
-        inline Type& operator*();
-        inline const Type& operator*() const;
+        Type& operator*();
+        const Type& operator*() const;
 
-        inline ListItr& operator++();
-        inline ListItr operator++( int );
+        ListItr& operator++();
+        ListItr operator++( int );
 
-        inline ListItr& operator--();
-        inline ListItr operator--( int );
+        ListItr& operator--();
+        ListItr operator--( int );
 
-        inline bool operator==( const ListItr &rhs ) const;
-        inline bool operator!=( const ListItr &rhs ) const;
+        bool operator==( const ListItr &rhs ) const;
+        bool operator!=( const ListItr &rhs ) const;
 
     private:
 
@@ -95,27 +95,27 @@ namespace itlab
         typedef ListItr<Type>   Iterator;
         typedef const Iterator  Const_Iterator;
 
-        inline void clear();
-        inline bool isEmpty() const;
-        inline int size() const;
+        void clear();
+        bool isEmpty() const;
+        int size() const;
 
-        inline Iterator begin();
-        inline Const_Iterator begin() const;
+        Iterator begin();
+        Const_Iterator begin() const;
 
-        inline Iterator end();
-        inline Const_Iterator end() const;
+        Iterator end();
+        Const_Iterator end() const;
 
-        inline Type& front();
-        inline const Type& front() const;
+        Type& front();
+        const Type& front() const;
 
-        inline Type& back();
-        inline const Type& back() const;
+        Type& back();
+        const Type& back() const;
 
-        inline void pushFront( const Type &x );
-        inline void pushBack( const Type &x );
+        void pushFront( const Type &x );
+        void pushBack( const Type &x );
 
-        inline void popFront();
-        inline void popBack();
+        void popFront();
+        void popBack();
 
         Iterator insert( Iterator itr, const Type &x );
         Iterator erase( Iterator itr );
@@ -127,7 +127,7 @@ namespace itlab
         Node<Type>  *head;
         Node<Type>  *tail;
 
-        inline void init();
+        void init();
 
     };
     // class DList

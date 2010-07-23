@@ -9,7 +9,7 @@
  * many solutions, but we can find the minimum norm sulution that minimize
  * norm of x.
  *
- * Zhang Ming, 2010-07, Xi'an Jiaotong Univerty.
+ * Zhang Ming, 2010-07, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -18,7 +18,6 @@
 
 
 #include <qrd.h>
-#include <svd.h>
 #include <detlinequs.h>
 
 

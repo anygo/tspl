@@ -3,7 +3,7 @@
  *
  * Implementation for Vector class.
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -26,7 +26,7 @@ void Vector<Type>::init( int length )
  * copy vector from normal array
  */
 template <typename Type>
-void Vector<Type>::copyFromArray( const Type *v )
+inline void Vector<Type>::copyFromArray( const Type *v )
 {
 	for( int i=0; i<nRow; ++i )
 		pv0[i] = v[i];
@@ -37,7 +37,7 @@ void Vector<Type>::copyFromArray( const Type *v )
  * set vector by a scalar
  */
 template <typename Type>
-void Vector<Type>::setByScalar( const Type &x )
+inline void Vector<Type>::setByScalar( const Type &x )
 {
 	for( int i=0; i<nRow; ++i )
 		pv0[i] = x;

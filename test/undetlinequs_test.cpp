@@ -3,7 +3,7 @@
  *
  * Undetermined Linear Equations testing.
  *
- * Zhang Ming, 2010-07, Xi'an Jiaotong Univerty.
+ * Zhang Ming, 2010-07, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

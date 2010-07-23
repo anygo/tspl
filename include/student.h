@@ -3,7 +3,7 @@
  *
  * A student class including comparison operators.
  *
- * Zhang Ming, 2009-10
+ * Zhang Ming, 2009-10, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

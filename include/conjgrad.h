@@ -8,7 +8,7 @@
  * Ribiere-Polyak) formula are used to get the step size and conjgate
  * coefficient "beta" in each iteration.
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

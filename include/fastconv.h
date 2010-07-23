@@ -10,7 +10,7 @@
  * R1[x(t),y(t)] = sum{ x(u)*y(u+t) } = Conv[x(-t),y(t)]
  * R2[x(t),y(t)] = sum{ x(u)*y(u-t) } = Conv[x(t),y(-t)]
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

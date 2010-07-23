@@ -9,12 +9,12 @@
  * with the character "v", and those for matrix, are prefixed with the
  * character "m".
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
-#ifndef MATHFUN_H
-#define MATHFUN_H
+#ifndef MATHFUNC_H
+#define MATHFUNC_H
 
 
 #include <complex>
@@ -223,4 +223,4 @@ namespace itlab
 
 
 #endif
-// MATHFUN_H
+// MATHFUNC_H

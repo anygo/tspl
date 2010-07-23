@@ -3,7 +3,7 @@
  *
  * Implementation for binary search rree.
  *
- * Zhang Ming, 2010-07
+ * Zhang Ming, 2010-07, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -347,7 +347,7 @@ BSNode<Object>* BSTree<Object, Key>::maxItem( BSNode<Object> *r )
  * Visit the item pointed by "p".
  */
 template <typename Object, typename Key>
-void BSTree<Object, Key>::visit( BSNode<Object> *p )
+inline void BSTree<Object, Key>::visit( BSNode<Object> *p )
 {
     cout << p->data;
 }

@@ -15,7 +15,7 @@
  * line. When done debugging, comment out #define BOUNDS_CHECK for better
  * performance.
  *
- * Zhang Ming, 2009-10
+ * Zhang Ming, 2009-10, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

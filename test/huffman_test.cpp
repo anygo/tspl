@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <string>
-#include "huffmancode.h"
+#include <huffmancode.h>
 
 
 using namespace std;

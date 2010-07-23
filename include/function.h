@@ -7,7 +7,7 @@
  * gradient vector. The objective function is supposed to be multidimensional,
  * one dimention is the special case of "vector.dim()=1".
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

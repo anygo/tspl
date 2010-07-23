@@ -3,7 +3,7 @@
  *
  * Base class for interpolation.
  *
- * Zhang Ming, 2010-04
+ * Zhang Ming, 2010-04, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

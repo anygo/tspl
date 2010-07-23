@@ -11,7 +11,7 @@
  *
  * Adapted form Template Numerical Toolkit.
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

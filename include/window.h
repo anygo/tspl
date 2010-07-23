@@ -8,12 +8,12 @@
  *      Blackman         Kaiser          Gauss
  * All of them are same to those in "Matlab".
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
-#ifndef WINDOWS_H
-#define WINDOWS_H
+#ifndef WINDOW_H
+#define WINDOW_H
 
 
 #include <constants.h>
@@ -229,4 +229,4 @@ namespace itlab
 
 
 #endif
-// WINDOWS_H
+// WINDOW_H

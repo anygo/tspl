@@ -3,7 +3,7 @@
  *
  * Implementation for Queue class.
  *
- * Zhang Ming, 2009-10
+ * Zhang Ming, 2009-10, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -52,7 +52,7 @@ inline void Queue<Type>::makeEmpty()
  * Enter an element into the queue.
  */
 template <typename Type>
-inline void Queue<Type>::enqueue( const Type &x )
+void Queue<Type>::enqueue( const Type &x )
 {
     if( front == NULL )
 	{
@@ -80,7 +80,7 @@ inline void Queue<Type>::enqueue( const Type &x )
  * Pop an element from the queue.
  */
 template <typename Type>
-inline void Queue<Type>::dequeue()
+void Queue<Type>::dequeue()
 {
     if( !isEmpty() )
     {
@@ -93,7 +93,7 @@ inline void Queue<Type>::dequeue()
 }
 
 template <typename Type>
-inline void Queue<Type>::dequeue( Type &x )
+void Queue<Type>::dequeue( Type &x )
 {
     if( !isEmpty() )
     {
