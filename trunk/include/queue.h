@@ -3,7 +3,7 @@
  *
  * A simple queue implemented by C++ template class .
  *
- * Zhang Ming, 2009-10
+ * Zhang Ming, 2009-10, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -52,20 +52,20 @@ namespace itlab
 //        Queue( const Queue<Type> &rhs);
 //        Queue<Type>& operator=( const Queue<Type> &rhs);
 
-        inline bool isEmpty() const;
-        inline void makeEmpty();
+        bool isEmpty() const;
+        void makeEmpty();
 
-        inline void enqueue( const Type &x );
-        inline void dequeue();
-        inline void dequeue( Type &x );
-        inline void getFront( Type &x );
+        void enqueue( const Type &x );
+        void dequeue();
+        void dequeue( Type &x );
+        void getFront( Type &x );
 
     private:
 
         LinkNode<Type> *front,
                        *rear;
 
-        inline void handleUnderflow();
+        void handleUnderflow();
 
     };
 

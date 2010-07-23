@@ -7,7 +7,7 @@
  * Hash Table. We use the quadratic probing method to prevent the element
  * number exceeding half of the total table size.
  *
- * Zhang Ming, 2009-10
+ * Zhang Ming, 2009-10, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -39,7 +39,7 @@ namespace itlab
 
         void makeEmpty();
 
-        inline bool search( const Key k, Object &x ) const;
+        bool search( const Key k, Object &x ) const;
         bool insert( const Object &x );
         bool remove( const Key k, Object &x );
 
@@ -62,7 +62,7 @@ namespace itlab
         int currentSize;
         int tableSize;
 
-        inline bool isActive( int currentPos ) const;
+        bool isActive( int currentPos ) const;
         int findPos( const Key k ) const;
         void rehash( );
 

@@ -15,7 +15,7 @@
  * line. When done debugging, comment out #define BOUNDS_CHECK for better
  * performance.
  *
- * Zhang Ming, 2010-07
+ * Zhang Ming, 2010-07, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -81,7 +81,7 @@ namespace itlab
     };
 
 
-    #include "amgraph-impl.h"
+    #include <amgraph-impl.h>
 
 }
 // namespace itlab

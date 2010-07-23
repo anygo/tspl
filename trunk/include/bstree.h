@@ -8,7 +8,7 @@
  *
  * All of the algorithms are implemented by the nonrecursion method.
  *
- * Zhang Ming, 20010-07
+ * Zhang Ming, 20010-07, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

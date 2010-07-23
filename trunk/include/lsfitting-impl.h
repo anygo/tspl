@@ -3,7 +3,7 @@
  *
  * Implementation for LSFitting class.
  *
- * Zhang Ming, 2010-04
+ * Zhang Ming, 2010-04, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

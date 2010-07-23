@@ -3,7 +3,7 @@
  *
  * Implementation for Hashtable class.
  *
- * Zhang Ming, 2009-10
+ * Zhang Ming, 2009-10, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -63,7 +63,7 @@ HashTable<Object, Key>& HashTable<Object, Key>::operator=( const HashTable<Objec
  * Make the table empty.
  */
 template <typename Object, typename Key>
-void HashTable<Object, Key>::makeEmpty( )
+inline void HashTable<Object, Key>::makeEmpty( )
 {
     currentSize = 0;
     for( int i = 0; i < tableSize; ++i )

@@ -11,7 +11,7 @@
  * fast FFT algorithm. Not super-optimized lightning-fast, but very good
  * considering its age and relative simplicity.
  *
- * Zhang Ming, 2010-04
+ * Zhang Ming, 2010-04, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

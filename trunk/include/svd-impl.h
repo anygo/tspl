@@ -3,7 +3,7 @@
  *
  * Implementation for SVD class.
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -29,12 +29,34 @@ void SVD<Real>::dec( const Matrix<Real> &A )
 {
     m = A.rows();
     n = A.cols();
-    int nu = min( m, n );
+    if( m < n )
+        mLTn = true;
+    else
+        mLTn = false;
+
+    if( !mLTn )
+        decomposition( A );
+    else
+    {
+        Matrix<Real> At( transpose( A ) );
+        decomposition( At );
+    }
+}
+
+
+/**
+ * Making singular decomposition of m >= n.
+ */
+template <typename Real>
+void SVD<Real>::decomposition( const Matrix<Real> &A )
+{
+    m = A.rows();
+    n = A.cols();
 
     Matrix<Real> M(A);
-    U = Matrix<Real>( m, nu );
+    U = Matrix<Real>( m, n );
     V = Matrix<Real>( n, n );
-    s = Vector<Real>( min(m+1,n) );
+    s = Vector<Real>( n );
 
     Vector<Real> e(n);
     Vector<Real> work(m);
@@ -46,7 +68,7 @@ void SVD<Real>::dec( const Matrix<Real> &A )
     // Reduce A to bidiagonal form, storing the diagonal elements
     // in s and the super-diagonal elements in e.
     int nct = min( m-1, n );
-    int nrt = max( 0, min(n-2,m) );
+    int nrt = max( 0, n-2 );
     int i=0,
         j=0,
         k=0;
@@ -143,7 +165,7 @@ void SVD<Real>::dec( const Matrix<Real> &A )
     }
 
     // Set up the final bidiagonal matrix or order p.
-    int p = min( n, m+1 );
+    int p = n;
 
     if( nct < n )
         s[nct] = M[nct][nct];
@@ -157,7 +179,7 @@ void SVD<Real>::dec( const Matrix<Real> &A )
     // if required, generate U
     if( wantu )
     {
-        for( j=nct; j<nu; ++j )
+        for( j=nct; j<n; ++j )
         {
             for( i=0; i<m; ++i )
                 U[i][j] = 0;
@@ -167,7 +189,7 @@ void SVD<Real>::dec( const Matrix<Real> &A )
         for( k=nct-1; k>=0; --k )
             if( s[k] != 0 )
             {
-                for( j=k+1; j<nu; ++j )
+                for( j=k+1; j<n; ++j )
                 {
                     Real t = 0;
                     for( i=k; i<m; ++i )
@@ -198,7 +220,7 @@ void SVD<Real>::dec( const Matrix<Real> &A )
         for( k=n-1; k>=0; --k )
         {
             if( (k < nrt) && ( e[k] != 0 ) )
-                for( j=k+1; j<nu; ++j )
+                for( j=k+1; j<n; ++j )
                 {
                     Real t = 0;
                     for( i=k+1; i<n; ++i )
@@ -450,16 +472,36 @@ void SVD<Real>::dec( const Matrix<Real> &A )
  * Get the left singular vectors.
  */
 template<typename Real>
-Matrix<Real> SVD<Real>::getU() const
+inline Matrix<Real> SVD<Real>::getU() const
 {
-    int minm = min( m+1, n );
-    Matrix<Real> tmp( m, minm );
+    if( !mLTn )
+        return U;
+    else
+        return V;
+}
 
-    for( int i=0; i<m; ++i )
-        for( int j=0; j<minm; ++j )
-            tmp[i][j] = U[i][j];
+
+/**
+ * Get the singular values matrix.
+ */
+template<typename Real>
+inline Matrix<Real> SVD<Real>::getSM()
+{
+    Matrix<Real> tmp( n, n );
+    for( int i=0; i<n; ++i )
+        tmp[i][i] = s[i];
 
     return tmp;
+}
+
+
+/**
+ * Get the singular values vector.
+ */
+template<typename Real>
+inline Vector<Real> SVD<Real>::getSV() const
+{
+    return s;
 }
 
 
@@ -469,17 +511,10 @@ Matrix<Real> SVD<Real>::getU() const
 template<typename Real>
 inline Matrix<Real> SVD<Real>::getV() const
 {
-    return V;
-}
-
-
-/**
- * Get the singular values.
- */
-template<typename Real>
-inline Vector<Real> SVD<Real>::getS() const
-{
-    return s;
+    if( !mLTn )
+        return V;
+    else
+        return U;
 }
 
 
@@ -510,7 +545,7 @@ template <typename Real>
 int SVD<Real>::rank()
 {
     double eps = pow(2.0,-52.0);
-    double tol = max(m,n) * s[0] * eps;
+    double tol = m * s[0] * eps;
     int r = 0;
 
     for( int i=0; i<s.dim(); ++i )

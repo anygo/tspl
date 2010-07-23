@@ -3,7 +3,7 @@
  *
  * Implementation for DWT class.
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -32,7 +32,7 @@ DWT<Type>::~DWT()
  * get coefficients of filter bank
  */
 template<typename Type>
-void DWT<Type>::getFilter( const string &wname )
+inline void DWT<Type>::getFilter( const string &wname )
 {
     if( wname == "db4" )
         db4Coefs( ld, hd, lr, hr );

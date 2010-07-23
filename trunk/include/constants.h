@@ -3,7 +3,7 @@
  *
  * Some constants often used in numeric computing.
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -14,7 +14,7 @@
 namespace itlab
 {
 
-    const double	EPS		    = 0.000000000000001;
+    const double	EPS		    = 2.220446049250313e-016;
 
     const double	PI		    = 3.141592653589793;
     const double	TWOPI	    = 6.283185307179586;

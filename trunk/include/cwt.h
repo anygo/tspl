@@ -13,7 +13,7 @@
  * sufficient precision in practice. Of course you can improve the accurate
  * by extend the range of scale parameter.
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

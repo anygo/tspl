@@ -3,7 +3,7 @@
  *
  * Implementation for LineSearch class.
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -91,7 +91,7 @@ Dtype LineSearch<Dtype, Ftype>::getStep( Ftype &func, Vector<Dtype> &xk,
  * Get the number of objective function's calculation.
  */
 template <typename Dtype, typename Ftype>
-int LineSearch<Dtype, Ftype>::getFuncNum() const
+inline int LineSearch<Dtype, Ftype>::getFuncNum() const
 {
     return funcNum;
 }
@@ -101,7 +101,7 @@ int LineSearch<Dtype, Ftype>::getFuncNum() const
  * Judgement whether the optimal solution is found or not.
  */
 template <typename Dtype, typename Ftype>
-bool LineSearch<Dtype, Ftype>::isSuccess() const
+inline bool LineSearch<Dtype, Ftype>::isSuccess() const
 {
     return success;
 }

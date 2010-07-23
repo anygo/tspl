@@ -6,7 +6,7 @@
  * This routine is often used in orther optimation method, so it is designed
  * as a templated base class.
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

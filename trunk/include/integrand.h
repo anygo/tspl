@@ -3,7 +3,7 @@
  *
  * Integrand used in numerical integral.
  *
- * Zhang Ming, 2010-04
+ * Zhang Ming, 2010-04, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

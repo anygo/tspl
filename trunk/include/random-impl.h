@@ -3,7 +3,7 @@
  *
  * Implementation for Random class.
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -28,7 +28,7 @@ Random::~Random()
 /**
  * Set the internal state.
  */
-void Random::seed( int value )
+inline void Random::seed( int value )
 {
     state = value;
 }
@@ -54,7 +54,7 @@ int Random::random()
  * Return an int in the closed range [low, high], and
  * then change the internal state.
  */
-int Random::random( int low, int high )
+inline int Random::random( int low, int high )
 {
     double normalization = random() / double(M);
     return (int) ( low + normalization*(high-low) );
@@ -65,7 +65,7 @@ int Random::random( int low, int high )
  * Return a pseudorandom double in the open range (low, high),
  * and then change the internal state.
  */
-double Random::random( double low, double high )
+inline double Random::random( double low, double high )
 {
     double normalization = random() / double(M);
     return (double) ( low + normalization*(high-low) );

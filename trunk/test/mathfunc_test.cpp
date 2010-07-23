@@ -3,7 +3,7 @@
  *
  * Math functions for vector and matrix testing.
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

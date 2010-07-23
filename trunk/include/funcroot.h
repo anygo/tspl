@@ -11,7 +11,7 @@
  * superlinear convergence rate( the order is 1.618 ), so it's a practical
  * method in many cases.
  *
- * Zhang Ming, 2010-04
+ * Zhang Ming, 2010-04, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

@@ -5,7 +5,7 @@
  * minimum, maximum, median, mean, variance, standard variance, skew, kurtosis
  * and the PDF(probability density function).
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

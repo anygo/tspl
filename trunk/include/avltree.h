@@ -8,7 +8,7 @@
  * technology is used to keep the tree balanced. Of cause, you can get the
  * height of the tree by the subroutine "height".
  *
- * Zhang Ming, 2009-10
+ * Zhang Ming, 2009-10, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -70,15 +70,15 @@ namespace itlab
     //	AVLTree( const AVLTree<Object, Type> &rhs );
     //	AVLTree<Object, Type>& operator=( const AVLTree<Object, Type> &rhs );
 
-        inline bool isEmpty() const;
-        inline void makeEmpty();
+        bool isEmpty() const;
+        void makeEmpty();
 
-        inline void print( const string &mode );
+        void print( const string &mode );
 
-        inline int height() const;
-        inline AVLNode<Object, Key>* search( Key k );
-        inline bool insert( Object &x );
-        inline bool remove( Key k, Object &x );
+        int height() const;
+        AVLNode<Object, Key>* search( Key k );
+        bool insert( Object &x );
+        bool remove( Key k, Object &x );
 
     private:
 

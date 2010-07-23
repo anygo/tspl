@@ -3,7 +3,7 @@
  *
  * Statistics routines testing.
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

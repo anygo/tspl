@@ -3,7 +3,7 @@
  *
  * Implementation for EVD class.
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -891,7 +891,7 @@ void EVD<Real>::dec( const Matrix<Real> &A )
  * Making normalization and sorting.
  */
 template <typename Real>
-inline void EVD<Real>::normalized()
+void EVD<Real>::normalized()
 {
     Real norm2;
     for( int j=0; j<n; ++j )

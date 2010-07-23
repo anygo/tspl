@@ -8,7 +8,7 @@
  * to get the step size in each iteration. BFGS (Broyden-Fletcher-Goldfarb
  * -Shanno) modifier formula is used to compute the inverse of Hesse matrix.
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

@@ -6,7 +6,7 @@
  * For a given points set "Pn" {xn,yn}, this class can find a polynomial which
  * cross all points of "Pn".
  *
- * Zhang Ming, 2010-04
+ * Zhang Ming, 2010-04, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

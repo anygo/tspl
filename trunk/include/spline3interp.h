@@ -7,7 +7,7 @@
  * in each interval [x_i, x_i+1], such that both of the polynomials and their
  * first order derivative are continuous at the bound of each interval.
  *
- * Zhang Ming, 2010-04
+ * Zhang Ming, 2010-04, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

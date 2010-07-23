@@ -10,7 +10,7 @@
  * use the fast convolution algorithm "fastConv", which is implemented in
  * frequency domain by usin FFT.
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

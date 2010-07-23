@@ -3,7 +3,7 @@
  *
  * Sorting algorithm testing.
  *
- * Zhang Ming, 2009-10
+ * Zhang Ming, 2010-07, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

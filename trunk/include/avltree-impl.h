@@ -3,7 +3,7 @@
  *
  * Implementation for AVLTree class.
  *
- * Zhang Ming, 2009-10
+ * Zhang Ming, 2009-10, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -46,7 +46,7 @@ inline void AVLTree<Object, Key>::makeEmpty()
  * "mode", which can be "preorder", "inorder" or "postorder".
  */
 template <typename Object, typename Key>
-inline void AVLTree<Object, Key>::print( const string &mode )
+void AVLTree<Object, Key>::print( const string &mode )
 {
     if( isEmpty() )
         cout << "The tree is empty!" << endl;
@@ -121,7 +121,7 @@ inline bool AVLTree<Object, Key>::remove( Key k, Object &x )
  * Make the tree empty.
  */
 template <typename Object, typename Key>
-void AVLTree<Object, Key>::makeEmpty( AVLNode<Object, Key> * &t )
+inline void AVLTree<Object, Key>::makeEmpty( AVLNode<Object, Key> * &t )
 {
     if( t != NULL )
     {
@@ -137,7 +137,7 @@ void AVLTree<Object, Key>::makeEmpty( AVLNode<Object, Key> * &t )
  * preorder traversal
  */
 template <typename Object, typename Key>
-void AVLTree<Object, Key>::preTraversal( AVLNode<Object, Key> *t )
+inline void AVLTree<Object, Key>::preTraversal( AVLNode<Object, Key> *t )
 {
 	if( t != NULL )
 	{
@@ -152,7 +152,7 @@ void AVLTree<Object, Key>::preTraversal( AVLNode<Object, Key> *t )
  * inorder traversal
  */
 template <typename Object, typename Key>
-void AVLTree<Object, Key>::inTraversal( AVLNode<Object, Key> *t )
+inline void AVLTree<Object, Key>::inTraversal( AVLNode<Object, Key> *t )
 {
 	if( t != NULL )
 	{
@@ -167,7 +167,7 @@ void AVLTree<Object, Key>::inTraversal( AVLNode<Object, Key> *t )
  * postorder traversal
  */
 template <typename Object, typename Key>
-void AVLTree<Object, Key>::postTraversal( AVLNode<Object, Key> *t )
+inline void AVLTree<Object, Key>::postTraversal( AVLNode<Object, Key> *t )
 {
 	if( t != NULL )
 	{
@@ -182,7 +182,7 @@ void AVLTree<Object, Key>::postTraversal( AVLNode<Object, Key> *t )
  * Compute the high of the subtree with root of "t".
  */
 template <typename Object, typename Key>
-int AVLTree<Object, Key>::height( AVLNode<Object, Key> *t ) const
+inline int AVLTree<Object, Key>::height( AVLNode<Object, Key> *t ) const
 {
 	if( !t )
 		return -1;
@@ -627,7 +627,7 @@ void AVLTree<Object, Key>::rotateRL( AVLNode<Object, Key> * &t )
  * Handle the error of get element from an empty tree.
  */
 template <typename Object, typename Key>
-void AVLTree<Object, Key>::handleUnderflow()
+inline void AVLTree<Object, Key>::handleUnderflow()
 {
     cerr << "The tree is empty!" << endl << endl;
     exit( 1 );

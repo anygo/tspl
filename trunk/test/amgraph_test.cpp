@@ -3,14 +3,14 @@
  *
  * Adjacency Matrix Based Undirected Graph testing.
  *
- * Zhang Ming, 2010-07
+ * Zhang Ming, 2010-07, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include "amgraph.h"
+#include <amgraph.h>
 
 
 using namespace std;

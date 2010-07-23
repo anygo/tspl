@@ -3,7 +3,7 @@
  *
  * Implementation for Huffman code.
  *
- * Zhang Ming, 2010-07
+ * Zhang Ming, 2010-07, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

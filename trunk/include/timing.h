@@ -4,7 +4,7 @@
  * Making a coarse estimation for programm's running time. The time unit
  * is second.
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

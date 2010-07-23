@@ -3,7 +3,7 @@
  *
  * Implementation for Matrix class.
  *
- * Zhang Ming, 2010-01
+ * Zhang Ming, 2010-01, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -42,7 +42,7 @@ void Matrix<Type>::init( int rows, int columns )
  * copy matrix from normal array
  */
 template <typename Type>
-void Matrix<Type>::copyFromArray( const Type *v )
+inline void Matrix<Type>::copyFromArray( const Type *v )
 {
 	for( long i=0; i<nTotal; ++i )
 		pv0[i] = v[i];
@@ -53,7 +53,7 @@ void Matrix<Type>::copyFromArray( const Type *v )
  * set matrix by a scalar
  */
 template <typename Type>
-void Matrix<Type>::setByScalar( const Type &x )
+inline void Matrix<Type>::setByScalar( const Type &x )
 {
 	for( long i=0; i<nTotal; ++i )
 		pv0[i] = x;

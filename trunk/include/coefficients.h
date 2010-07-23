@@ -4,7 +4,7 @@
  * Some generally used filter coeffcients in wavelet transform.
  *
  *
- * Zhang Ming, 2010-03
+ * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
 
 

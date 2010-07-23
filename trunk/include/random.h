@@ -7,7 +7,7 @@
  * number in interval [a,b]. The default initial state is set to 1, of cause
  * it can be set to any integer by routine "seed(int)".
  *
- * Zhang Ming, 2010-04
+ * Zhang Ming, 2010-04, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
