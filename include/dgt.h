@@ -30,6 +30,7 @@
 #include <complex>
 #include <fft.h>
 #include <matrix.h>
+#include <rankdeflinequs.h>
 #include <utilities.h>
 
 
@@ -64,7 +65,8 @@ namespace itlab
                 }
 
             // calculate the kth part value of h
-            Vector<Type> tmp = prod( tranProd( H, inverse(prod(H,transpose(H))) ), u );
+//            Vector<Type> tmp = prod( tranProd( H, inverse(prod(H,transpose(H))) ), u );
+            Vector<Type> tmp = tsvd( H, u );
             for( int i=0; i<tmp.dim(); ++i )
                 hn[k+i*dM] = tmp[i];
         }
