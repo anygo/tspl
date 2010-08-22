@@ -12,7 +12,6 @@
 #include <iostream>
 #include <complex>
 #include <fft.h>
-#include <constants.h>
 
 
 using namespace std;
@@ -20,7 +19,7 @@ using namespace itlab;
 
 
 const   int     N = 7;
-typedef float   Type;
+typedef long double   Type;
 
 
 int main()

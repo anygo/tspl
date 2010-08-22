@@ -26,8 +26,16 @@ int main()
     cout << "Hanning window : " << hanning(N) << endl << endl;
     cout << "Hamming window : " << hamming(N) << endl << endl;
     cout << "Blackman window : " << blackman(N) << endl << endl;
-    cout << "Kaiser window : " << kaiser(8/PI,N) << endl << endl;
-    cout << "Gauss window : " << gauss(N) << endl;
+    cout << "Kaiser window : " << kaiser(N,8/PI) << endl << endl;
+    cout << "Gauss window : " << gauss(N) << endl << endl;
+
+    cout << "Rectangle window : " << window("Rectangle",N) << endl << endl;
+    cout << "Bartlett window : " << window("Bartlett",N) << endl << endl;
+    cout << "Hanning window : " << window("Hanning",N) << endl << endl;
+    cout << "Hamming window : " << window("Hamming",N) << endl << endl;
+    cout << "Blackman window : " << window("Blackman",N) << endl << endl;
+    cout << "Kaiser window : " << window("Kaiser",N, 8/PI) << endl << endl;
+    cout << "Gauss window : " << window("Gauss",N,2.5) << endl;
 
     return 0;
 }

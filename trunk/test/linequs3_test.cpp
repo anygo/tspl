@@ -10,7 +10,7 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include <rankdeflinequs.h>
+#include <linequs3.h>
 
 
 using namespace std;

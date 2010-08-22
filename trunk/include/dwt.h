@@ -31,7 +31,7 @@
 #include <cstdlib>
 #include <vector.h>
 #include <utilities.h>
-#include <coefficients.h>
+#include <filtercoefs.h>
 
 
 namespace itlab

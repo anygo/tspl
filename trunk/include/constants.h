@@ -29,7 +29,7 @@ namespace itlab
     const int		FORWARD	    = 1;
     const int		INVERSE	    = 0;
 
-    const int		MAXTERM	    = 100;
+    const int		MAXTERM	    = 20;
     const int       INITSIZE    = 20;
     const int       EXTFACTOR   = 2;
 

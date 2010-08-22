@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include <dgt.h>
-#include <mathfunc.h>
+#include <vectormath.h>
 #include <timing.h>
 
 
@@ -34,7 +34,7 @@ int main()
 	Type a = 0;
 	Type b = Ls-1;
 	Vector<Type> t = linspace( a, b, Ls ) / Type(Fs);
-	Vector<Type> st = vcos( Type(400*PI) * vpow(t,Type(2.0)) );
+	Vector<Type> st = cos( Type(400*PI) * pow(t,Type(2.0)) );
 
 	/******************************* [ widow ] ******************************/
 	a = 0;

@@ -22,7 +22,6 @@
 #include <complex>
 #include <vector.h>
 #include <utilities.h>
-#include <constants.h>
 
 
 namespace itlab

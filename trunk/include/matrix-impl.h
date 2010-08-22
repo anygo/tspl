@@ -3,7 +3,7 @@
  *
  * Implementation for Matrix class.
  *
- * Zhang Ming, 2010-01, Xi'an Jiaotong University.
+ * Zhang Ming, 2010-01 (revised 2010-08), Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -15,11 +15,11 @@ void Matrix<Type>::init( int rows, int columns )
 {
 	nRow = rows;
 	nColumn = columns;
-	nTotal = rows * columns;
+	nTotal = nRow * nColumn;
 
 	pv0 = new Type[nTotal];
-	prow0 = new Type*[rows];
-	prow1 = new Type*[rows];
+	prow0 = new Type*[nRow];
+	prow1 = new Type*[nRow];
 
 	assert( pv0 != NULL );
 	assert( prow0 != NULL );
@@ -354,6 +354,215 @@ void Matrix<Type>::setColumn(const Vector<Type> &v, int column )
 
 
 /**
+ * compound assignment operators +=
+ */
+template <typename Type>
+Matrix<Type>& Matrix<Type>::operator+=( const Type &x )
+{
+    Type **rowPtr = prow0;
+    Type *colPtr = 0;
+
+    for( int i=0; i<nRow; ++i )
+    {
+        colPtr = *rowPtr++;
+        for( int j=0; j<nColumn; ++j )
+            *colPtr++ += x;
+    }
+
+	return *this;
+}
+
+template <typename Type>
+Matrix<Type>& Matrix<Type>::operator+=( const Matrix<Type> &rhs )
+{
+    assert( nRow == rhs.rows() );
+    assert( nColumn == rhs.cols() );
+
+    Type **rowPtrL = prow0;
+    Type *colPtrL = 0;
+    Type **rowPtrR = rhs.prow0;
+    const Type *colPtrR = 0;
+
+    for( int i=0; i<nRow; ++i )
+    {
+        colPtrL = *rowPtrL++;
+        colPtrR = *rowPtrR++;
+        for( int j=0; j<nColumn; ++j )
+            *colPtrL++ += *colPtrR++;
+    }
+
+	return *this;
+}
+
+
+/**
+ * compound assignment operators -=
+ */
+template <typename Type>
+Matrix<Type>& Matrix<Type>::operator-=( const Type &x )
+{
+    Type **rowPtr = prow0;
+    Type *colPtr = 0;
+
+    for( int i=0; i<nRow; ++i )
+    {
+        colPtr = *rowPtr++;
+        for( int j=0; j<nColumn; ++j )
+            *colPtr++ -= x;
+    }
+
+	return *this;
+}
+
+template <typename Type>
+Matrix<Type>& Matrix<Type>::operator-=( const Matrix<Type> &rhs )
+{
+    assert( nRow == rhs.rows() );
+    assert( nColumn == rhs.cols() );
+
+    Type **rowPtrL = prow0;
+    Type *colPtrL = 0;
+    Type **rowPtrR = rhs.prow0;
+    const Type *colPtrR = 0;
+
+    for( int i=0; i<nRow; ++i )
+    {
+        colPtrL = *rowPtrL++;
+        colPtrR = *rowPtrR++;
+        for( int j=0; j<nColumn; ++j )
+            *colPtrL++ -= *colPtrR++;
+    }
+
+	return *this;
+}
+
+
+/**
+ * compound assignment operators *=
+ */
+template <typename Type>
+Matrix<Type>& Matrix<Type>::operator*=( const Type &x )
+{
+    Type **rowPtr = prow0;
+    Type *colPtr = 0;
+
+    for( int i=0; i<nRow; ++i )
+    {
+        colPtr = *rowPtr++;
+        for( int j=0; j<nColumn; ++j )
+            *colPtr++ *= x;
+    }
+
+	return *this;
+}
+
+template <typename Type>
+Matrix<Type>& Matrix<Type>::operator*=( const Matrix<Type> &rhs )
+{
+    assert( nRow == rhs.rows() );
+    assert( nColumn == rhs.cols() );
+
+    Type **rowPtrL = prow0;
+    Type *colPtrL = 0;
+    Type **rowPtrR = rhs.prow0;
+    const Type *colPtrR = 0;
+
+    for( int i=0; i<nRow; ++i )
+    {
+        colPtrL = *rowPtrL++;
+        colPtrR = *rowPtrR++;
+        for( int j=0; j<nColumn; ++j )
+            *colPtrL++ *= *colPtrR++;
+    }
+
+	return *this;
+}
+
+
+/**
+ * compound assignment operators /=
+ */
+template <typename Type>
+Matrix<Type>& Matrix<Type>::operator/=( const Type &x )
+{
+    Type **rowPtr = prow0;
+    Type *colPtr = 0;
+
+    for( int i=0; i<nRow; ++i )
+    {
+        colPtr = *rowPtr++;
+        for( int j=0; j<nColumn; ++j )
+            *colPtr++ /= x;
+    }
+
+	return *this;
+}
+
+template <typename Type>
+Matrix<Type>& Matrix<Type>::operator/=( const Matrix<Type> &rhs )
+{
+    assert( nRow == rhs.rows() );
+    assert( nColumn == rhs.cols() );
+
+    Type **rowPtrL = prow0;
+    Type *colPtrL = 0;
+    Type **rowPtrR = rhs.prow0;
+    const Type *colPtrR = 0;
+
+    for( int i=0; i<nRow; ++i )
+    {
+        colPtrL = *rowPtrL++;
+        colPtrR = *rowPtrR++;
+        for( int j=0; j<nColumn; ++j )
+            *colPtrL++ /= *colPtrR++;
+    }
+
+	return *this;
+}
+
+
+/**
+ * Overload the output stream function.
+ */
+template <typename Type>
+ostream& operator<<( ostream &out, const Matrix<Type> &A )
+{
+	int rows = A.rows();
+	int columns = A.cols();
+
+	out << "size: " << rows << " by " << columns << "\n";
+	for( int i=0; i<rows; ++i )
+	{
+		for( int j=0; j<columns; ++j )
+			out << A[i][j] << " ";
+		out << "\n";
+	}
+
+	return out;
+}
+
+
+/**
+ * Overload the intput stream function.
+ */
+template <typename Type>
+istream& operator>>( istream &in, Matrix<Type> &A )
+{
+	int rows, columns;
+	in >> rows >> columns;
+
+	if( !( rows == A.rows() && columns == A.cols() ) )
+		A.resize( rows, columns );
+
+	for( int i=0; i<rows; ++i )
+		for( int j=0; j<columns; ++j )
+			in >> A[i][j];
+
+	return in;
+}
+
+
+/**
  * get negative matrix
  */
 template<typename Type>
@@ -375,36 +584,16 @@ Matrix<Type> operator-( const Matrix<Type> &A )
  * matrix-scalar addition
  */
 template<typename Type>
-Matrix<Type> operator+( const Matrix<Type> &A, Type x )
+inline Matrix<Type> operator+( const Matrix<Type> &A, const Type &x )
 {
-	int rows = A.rows();
-	int columns = A.cols();
-
-	Matrix<Type> tmp( rows, columns );
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<columns; ++j )
-			tmp[i][j] = A[i][j] + x;
-
-	return tmp;
+	Matrix<Type> tmp( A );
+	return tmp += x;
 }
 
 template<typename Type>
-inline Matrix<Type> operator+( Type x, const Matrix<Type> &A )
+inline Matrix<Type> operator+( const Type &x, const Matrix<Type> &A )
 {
-	return ( A + x );
-}
-
-template<typename Type>
-Matrix<Type> operator+=( Matrix<Type> &A, Type x )
-{
-	int rows = A.rows();
-	int columns = A.cols();
-
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<columns; ++j )
-			A[i][j] += x;
-
-	return A;
+	return A + x;
 }
 
 
@@ -412,44 +601,17 @@ Matrix<Type> operator+=( Matrix<Type> &A, Type x )
  * matrix-scalar subtraction
  */
 template<typename Type>
-Matrix<Type> operator-( const Matrix<Type> &A, Type x )
+inline Matrix<Type> operator-( const Matrix<Type> &A, const Type &x )
 {
-	int rows = A.rows();
-	int columns = A.cols();
-
-	Matrix<Type> tmp( rows, columns );
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<columns; ++j )
-			tmp[i][j] = A[i][j] - x;
-
-	return tmp;
+	Matrix<Type> tmp( A );
+	return tmp -= x;
 }
 
 template<typename Type>
-Matrix<Type> operator-( Type x, const Matrix<Type> &A )
+inline Matrix<Type> operator-( const Type &x, const Matrix<Type> &A )
 {
-	int rows = A.rows();
-	int columns = A.cols();
-
-	Matrix<Type> tmp( rows, columns );
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<columns; ++j )
-			tmp[i][j] =  x - A[i][j];
-
-	return tmp;
-}
-
-template<typename Type>
-Matrix<Type> operator-=( Matrix<Type> &A, Type x )
-{
-	int rows = A.rows();
-	int columns = A.cols();
-
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<columns; ++j )
-			A[i][j] -= x;
-
-	return A;
+	Matrix<Type> tmp( A );
+	return -tmp += x;
 }
 
 
@@ -457,36 +619,16 @@ Matrix<Type> operator-=( Matrix<Type> &A, Type x )
  * matrix-scaling multiplication
  */
 template <typename Type>
-Matrix<Type> operator*( const Matrix<Type> &A, Type x )
+inline Matrix<Type> operator*( const Matrix<Type> &A, const Type &x )
 {
-	int rows = A.rows();
-	int clumns = A.cols();
-
-	Matrix<Type> tmp( rows,clumns );
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<clumns; ++j )
-			tmp[i][j] = A[i][j] * x;
-
-	return tmp;
+	Matrix<Type> tmp( A );
+	return tmp *= x;
 }
 
 template <typename Type>
-inline Matrix<Type> operator*( Type x, const Matrix<Type> &A )
+inline Matrix<Type> operator*( const Type &x, const Matrix<Type> &A )
 {
-	return ( A * x );
-}
-
-template <typename Type>
-Matrix<Type> operator*=( Matrix<Type> &A, Type x )
-{
-	int rows = A.rows();
-	int clumns = A.cols();
-
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<clumns; ++j )
-			A[i][j] *= x;
-
-	return A;
+	return A * x;
 }
 
 
@@ -494,21 +636,14 @@ Matrix<Type> operator*=( Matrix<Type> &A, Type x )
  * matrix-scalar division
  */
 template <typename Type>
-Matrix<Type> operator/( const Matrix<Type> &A, Type x )
+inline Matrix<Type> operator/( const Matrix<Type> &A, const Type &x )
 {
-	int rows = A.rows();
-	int clumns = A.cols();
-
-	Matrix<Type> tmp( rows,clumns );
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<clumns; ++j )
-			tmp[i][j] = A[i][j] / x;
-
-	return tmp;
+	Matrix<Type> tmp( A );
+	return tmp /= x;
 }
 
 template <typename Type>
-Matrix<Type> operator/( Type x, const Matrix<Type> &A )
+Matrix<Type> operator/( const Type &x, const Matrix<Type> &A )
 {
 	int rows = A.rows();
 	int clumns = A.cols();
@@ -521,54 +656,15 @@ Matrix<Type> operator/( Type x, const Matrix<Type> &A )
 	return tmp;
 }
 
-template <typename Type>
-Matrix<Type> operator/=( Matrix<Type> &A, Type x )
-{
-	int rows = A.rows();
-	int clumns = A.cols();
-
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<clumns; ++j )
-			A[i][j] /= x;
-
-	return A;
-}
-
 
 /**
  * matrix-matrix addition
  */
 template<typename Type>
-Matrix<Type> operator+( const Matrix<Type> &A1, const Matrix<Type> &A2 )
+inline Matrix<Type> operator+( const Matrix<Type> &A1, const Matrix<Type> &A2 )
 {
-	int rows = A1.rows();
-	int columns = A1.cols();
-
-	assert( rows == A2.rows() );
-	assert( columns == A2.cols() );
-
-	Matrix<Type> tmp( rows, columns );
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<columns; ++j )
-			tmp[i][j] = A1[i][j] + A2[i][j];
-
-	return tmp;
-}
-
-template<typename Type>
-Matrix<Type> operator+=( Matrix<Type> &A1, const Matrix<Type> &A2 )
-{
-	int rows = A1.rows();
-	int columns = A1.cols();
-
-	assert( rows == A2.rows() );
-	assert( columns == A2.cols() );
-
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<columns; ++j )
-			A1[i][j] += A2[i][j];
-
-	return A1;
+	Matrix<Type> tmp( A1 );
+	return tmp += A2;
 }
 
 
@@ -576,36 +672,10 @@ Matrix<Type> operator+=( Matrix<Type> &A1, const Matrix<Type> &A2 )
  * matrix-matrix subtraction
  */
 template<typename Type>
-Matrix<Type> operator-( const Matrix<Type> &A1, const Matrix<Type> &A2 )
+inline Matrix<Type> operator-( const Matrix<Type> &A1, const Matrix<Type> &A2 )
 {
-	int rows = A1.rows();
-	int columns = A1.cols();
-
-	assert( rows == A2.rows() );
-	assert( columns == A2.cols() );
-
-	Matrix<Type> tmp( rows, columns );
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<columns; ++j )
-			tmp[i][j] = A1[i][j] - A2[i][j];
-
-	return tmp;
-}
-
-template<typename Type>
-Matrix<Type> operator-=( Matrix<Type> &A1, const Matrix<Type> &A2 )
-{
-	int rows = A1.rows();
-	int columns = A1.cols();
-
-	assert( rows == A2.rows() );
-	assert( columns == A2.cols() );
-
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<columns; ++j )
-			A1[i][j] -= A2[i][j];
-
-	return A1;
+	Matrix<Type> tmp( A1 );
+	return tmp -= A2;
 }
 
 
@@ -613,73 +683,171 @@ Matrix<Type> operator-=( Matrix<Type> &A1, const Matrix<Type> &A2 )
  * matrix-matrix elementwise multiplication
  */
 template <typename Type>
-Matrix<Type> operator*( const Matrix<Type> &A1, const Matrix<Type> &A2 )
+inline Matrix<Type> operator*( const Matrix<Type> &A1, const Matrix<Type> &A2 )
 {
-	int rows = A1.rows();
-	int clumns = A1.cols();
-
-	assert( rows == A2.rows() );
-	assert( clumns == A2.cols() );
-
-	Matrix<Type> tmp( rows, clumns );
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<clumns; ++j )
-			tmp[i][j] = A1[i][j] * A2[i][j];
-
-	return tmp;
+	Matrix<Type> tmp( A1 );
+	return tmp *= A2;
 }
 
-template <typename Type>
-Matrix<Type> operator*=( Matrix<Type> &A1, const Matrix<Type> &A2 )
-{
-	int rows = A1.rows();
-	int clumns = A1.cols();
-
-	assert( rows == A2.rows() );
-	assert( clumns == A2.cols() );
-
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<clumns; ++j )
-			A1[i][j] *= A2[i][j];
-
-	return A1;
-}
 
 
 /**
  * matrix-matrix elementwise division
  */
 template <typename Type>
-Matrix<Type> operator/( const Matrix<Type> &A1, const Matrix<Type> &A2 )
+inline Matrix<Type> operator/( const Matrix<Type> &A1, const Matrix<Type> &A2 )
 {
-	int rows = A1.rows();
-	int clumns = A1.cols();
+	Matrix<Type> tmp( A1 );
+	return tmp /= A2;
+}
 
-	assert( rows == A2.rows() );
-	assert( clumns == A2.cols() );
 
-	Matrix<Type> tmp( rows, clumns );
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<clumns; ++j )
-			tmp[i][j] = A1[i][j] / A2[i][j];
+/**
+ * Compute Frobenius norm of matrix.
+ */
+template <typename Type>
+Type norm( const Matrix<Type> &A )
+{
+	int m = A.rows();
+	int n = A.cols();
+
+	Type sum = 0;
+	for( int i=1; i<=m; ++i )
+		for( int j=1; j<=n; ++j )
+            sum += A(i,j) * A(i,j);
+
+	return sqrt(sum);
+}
+
+
+/**
+ * Swap two matrixes.
+ */
+template <typename Type> void swap( Matrix<Type> &lhs, Matrix<Type> &rhs )
+{
+    int m = lhs.rows();
+	int n = lhs.cols();
+
+	assert( m == rhs.rows() );
+	assert( n == rhs.cols() );
+
+	for( int i=1; i<=m; ++i )
+		for( int j=1; j<=n; ++j )
+            swap( lhs(i,j), rhs(i,j) );
+}
+
+
+/**
+ * Matrix's column vecotrs sum.
+ */
+template <typename Type>
+Vector<Type> sum( const Matrix<Type> &A )
+{
+	int m = A.rows();
+	int n = A.cols();
+	Vector<Type> sum(n);
+
+	for( int j=1; j<=n; ++j )
+		for( int i=1; i<=m; ++i )
+            sum(j) += A(i,j);
+
+	return sum;
+}
+
+
+/**
+ * Minimum of matrix's column vecotrs.
+ */
+template <typename Type>
+Vector<Type> min( const Matrix<Type> &A )
+{
+	int m = A.rows();
+	int n = A.cols();
+	Vector<Type> sum(n);
+
+	for( int j=1; j<=n; ++j )
+	{
+	    Type tmp = A(1,j);
+        for( int i=2; i<m; ++i )
+            if( tmp > A(i,j) )
+                tmp = A(i,j);
+        sum(j) = tmp;
+	}
+
+	return sum;
+}
+
+
+/**
+ * Maximum of matrix's column vecotrs.
+ */
+template <typename Type>
+Vector<Type> max( const Matrix<Type> &A )
+{
+	int m = A.rows();
+	int n = A.cols();
+	Vector<Type> sum(n);
+
+	for( int j=1; j<=n; ++j )
+	{
+	    Type tmp = A(1,j);
+        for( int i=2; i<m; ++i )
+            if( tmp < A(i,j) )
+                tmp = A(i,j);
+        sum(j) = tmp;
+	}
+
+	return sum;
+}
+
+
+/**
+ * Generate the identity matrix.
+ */
+template <typename Type>
+Matrix<Type> eye( int N, const Type &x )
+{
+    Matrix<Type> tmp( N, N );
+	for( int i=0; i<N; ++i )
+		tmp[i][i] = x;
 
 	return tmp;
 }
 
+
+/**
+ * Get the diagonal entries of matrix.
+ */
 template <typename Type>
-Matrix<Type> operator/=( Matrix<Type> &A1, const Matrix<Type> &A2 )
+Vector<Type> diag( const Matrix<Type> &A )
 {
-	int rows = A1.rows();
-	int clumns = A1.cols();
+	int nColumn = A.rows();
+	if( nColumn > A.cols() )
+		nColumn = A.cols();
 
-	assert( rows == A2.rows() );
-	assert( clumns == A2.cols() );
+	Vector<Type> tmp( nColumn );
+	for( int i=0; i<nColumn; ++i )
+		tmp[i] = A[i][i];
 
+	return tmp;
+}
+
+
+/**
+ * matrix tranpose
+ */
+template <typename Type>
+Matrix<Type> transpose( const Matrix<Type> &A )
+{
+	int rows = A.cols();
+	int clumns = A.rows();
+
+	Matrix<Type> tmp( rows, clumns );
 	for( int i=0; i<rows; ++i )
 		for( int j=0; j<clumns; ++j )
-			A1[i][j] /= A2[i][j];
+			tmp[i][j] = A[j][i];
 
-	return A1;
+	return tmp;
 }
 
 
@@ -687,9 +855,8 @@ Matrix<Type> operator/=( Matrix<Type> &A1, const Matrix<Type> &A2 )
  * This is an optimized version of matrix multiplication,
  * where the destination matrix has already been allocated.
  */
-template <class Type>
-Matrix<Type>& prod( const Matrix<Type> &A, const Matrix<Type> &B,
-                    Matrix<Type> &C )
+template <typename Type>
+Matrix<Type>& prod( const Matrix<Type> &A, const Matrix<Type> &B, Matrix<Type> &C )
 {
     int M = A.rows();
     int N = B.cols();
@@ -725,7 +892,7 @@ Matrix<Type>& prod( const Matrix<Type> &A, const Matrix<Type> &B,
  * matrix-matrix multiplication
  */
 template <typename Type>
-Matrix<Type> prod(const Matrix<Type> &A1, const Matrix<Type> &A2)
+Matrix<Type> prod( const Matrix<Type> &A1, const Matrix<Type> &A2 )
 {
 	assert( A1.cols() == A2.rows() );
 
@@ -752,9 +919,8 @@ Matrix<Type> prod(const Matrix<Type> &A1, const Matrix<Type> &A2)
  * This is an optimized version of matrix and vector multiplication,
  * where the destination vector has already been allocated.
  */
-template <class Type>
-Vector<Type>& prod( const Matrix<Type> &A, const Vector<Type> &b,
-                    Vector<Type> &c )
+template <typename Type>
+Vector<Type>& prod( const Matrix<Type> &A, const Vector<Type> &b, Vector<Type> &c )
 {
     int M = A.rows();
     int N = A.cols();
@@ -861,7 +1027,7 @@ Vector<Type> tranProd( const Matrix<Type> &A, const Vector<Type> &v )
 
 
 /**
- * vector-vector tranpose multiplication: tranpose(a)*b.
+ * vector-vector tranpose multiplication: a*tranpose(b).
  */
 template <typename Type>
 Matrix<Type> tranProd( const Vector<Type> &a, const Vector<Type> &b )
@@ -875,197 +1041,4 @@ Matrix<Type> tranProd( const Vector<Type> &a, const Vector<Type> &b )
 			tmp[i][j] = a[i]*b[j];
 
 	return tmp;
-}
-
-
-/**
- * matrix tranpose
- */
-template <typename Type>
-Matrix<Type> transpose( const Matrix<Type> &A )
-{
-	int rows = A.cols();
-	int clumns = A.rows();
-
-	Matrix<Type> tmp( rows, clumns );
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<clumns; ++j )
-			tmp[i][j] = A[j][i];
-
-	return tmp;
-}
-
-
-/**
- * Get the diagonal entries of matrix.
- */
-template <typename Type>
-Vector<Type> diag( const Matrix<Type> &A )
-{
-	int nColumn = A.rows();
-	if( nColumn > A.cols() )
-		nColumn = A.cols();
-
-	Vector<Type> tmp( nColumn );
-	for( int i=0; i<nColumn; ++i )
-		tmp[i] = A[i][i];
-
-	return tmp;
-}
-
-
-/**
- * Generate the identity matrix.
- */
-template <typename Type>
-Matrix<Type> eye( int N, Type x )
-{
-    Matrix<Type> tmp( N, N );
-	for( int i=0; i<N; ++i )
-		tmp[i][i] = x;
-
-	return tmp;
-}
-
-
-/**
- * matrix inverse: The order of matrix A should be small, or
- * this subroutine is inefficiency.
- */
-template <typename Type>
-Matrix<Type> inverse( const Matrix<Type> &A )
-{
-	int rows = A.rows();
-	int clumns = A.cols();
-
-	assert( rows == clumns );
-
-	Matrix<Type> invA(A);
-	Vector<int> index( rows, 0 );
-	int i, j, k;
-	Type tmp = 0;
-
-	for( k=0; k<rows; ++k )
-	{
-		//Findint pivot and exchange if necessary.
-		index[k] = k;
-		Type max = invA[k][k];
-		for( i=k+1; i<rows; ++i )
-		{
-			tmp = abs(invA[i][k]);
-			if( tmp > max )
-			{
-				max = tmp;
-				index[k] = i;
-			}
-		}
-		if( abs(max) < EPS )
-		{
-			cerr << "\n" << "A is a singular matrix." << "\n";
-			return Matrix<Type>(0,0);
-		}
-
-		if( index[k] != k )
-		{
-			tmp = 0;
-			for( j=0; j<rows; ++j )
-			{
-				tmp = invA[k][j];
-				invA[k][j] = invA[index[k]][j];
-				invA[index[k]][j] = tmp;
-			}
-		}
-
-		// Calculating the kth column.
-		invA[k][k] = 1/invA[k][k];
-		for( i=0; i<rows; ++i )
-			if( i != k )
-				invA[i][k] = - invA[k][k]*invA[i][k];
-
-		// Calculating all elements excptint the kth row and column.
-		for( i=0; i<rows; ++i )
-			if( i != k )
-				for( j=0; j<rows; ++j )
-					if( j != k )
-						invA[i][j] += invA[i][k] * invA[k][j];
-
-		// Calculating the kth row.
-		for( j=0; j<rows; ++j )
-			if( j != k )
-				invA[k][j] *= invA[k][k];
-	}
-
-	//Exchanging back.
-	for( k=0; k<rows; ++k )
-		if( index[k] != k )
-		{
-			tmp = 0;
-			for( i=0; i<rows; ++i )
-			{
-				tmp = invA[i][k];
-				invA[i][k] = invA[i][index[k]];
-				invA[i][index[k]] = tmp;
-			}
-		}
-
-	return invA;
-}
-
-
-/**
- * Compute Frobenius norm of matrix.
- */
-template <class Type>
-Type norm(const Matrix<Type> &A)
-{
-	int m = A.rows();
-	int n = A.cols();
-
-	Type sum = 0;
-	for( int i=1; i<=m; ++i )
-		for( int j=1; j<=n; ++j )
-            sum += A(i,j) * A(i,j);
-
-	return sqrt(sum);
-}
-
-
-/**
- * Overload the output stream function.
- */
-template <typename Type>
-std::ostream& operator<<( std::ostream &out, const Matrix<Type> &A )
-{
-	int rows = A.rows();
-	int columns = A.cols();
-
-	out << "size: " << rows << " by " << columns << "\n";
-	for( int i=0; i<rows; ++i )
-	{
-		for( int j=0; j<columns; ++j )
-			out << A[i][j] << " ";
-		out << "\n";
-	}
-
-	return out;
-}
-
-
-/**
- * Overload the intput stream function.
- */
-template <typename Type>
-std::istream& operator>>( std::istream &in, Matrix<Type> &A )
-{
-	int rows, columns;
-	in >> rows >> columns;
-
-	if( !( rows == A.rows() && columns == A.cols() ) )
-		A.resize( rows, columns );
-
-	for( int i=0; i<rows; ++i )
-		for( int j=0; j<columns; ++j )
-			in >> A[i][j];
-
-	return in;
 }

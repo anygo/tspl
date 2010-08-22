@@ -31,6 +31,12 @@
 namespace itlab
 {
 
+    using std::setw;
+    using std::ios;
+    using std::setiosflags;
+    using std::setprecision;
+
+
     class FIR : public DFD
     {
 

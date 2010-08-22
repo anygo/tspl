@@ -1,5 +1,5 @@
 /*****************************************************************************
- *                           linearequations_test.cpp
+ *                           linearequations1_test.cpp
  *
  * Deterministic Linear Equations testing.
  *
@@ -10,7 +10,7 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include <detlinequs.h>
+#include <linequs1.h>
 
 
 using namespace std;

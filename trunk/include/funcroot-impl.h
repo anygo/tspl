@@ -44,7 +44,7 @@ Type FuncRoot<Type>::bisection( NLFunc<Type> &f, Type a, Type b, Type tol )
         return Type(0);
     }
 
-    int maxItr = ceil( (log(b-a)-log(tol)) / log(2.0) );
+    int maxItr = (int) ceil( (log(b-a)-log(tol)) / log(2.0) );
 	for( int i=0; i<maxItr; ++i )
 	{
 	    c = ( a+ b) / 2;

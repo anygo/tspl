@@ -58,7 +58,7 @@ void LSFitting<Type>::calcCoefs()
         b(i) = tmp;
 	}
 
-    coefs = prod( inverse(C), b );
+    coefs = choleskySolver( C, b );
 }
 
 

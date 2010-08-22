@@ -1,5 +1,5 @@
 /*****************************************************************************
- *                           linearequations_test.cpp
+ *                           linearequations2_test.cpp
  *
  * Undetermined Linear Equations testing.
  *
@@ -10,7 +10,7 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include <undetlinequs.h>
+#include <linequs2.h>
 
 
 using namespace std;

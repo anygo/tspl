@@ -11,7 +11,6 @@
 
 #include <complex>
 #include <iostream>
-#include <constants.h>
 #include <vector.h>
 
 
@@ -60,7 +59,6 @@ int main()
 	cout << "new vector v4 : " << v4 << endl;
 	v4 = v1;
 	cout << "new vector v4 : " << v4 << endl;
-	cout << "reversion of vector v4 : " << v4.reverse() << endl;
 
 	k = 2;
 	v3 = k+v1;

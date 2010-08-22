@@ -37,6 +37,11 @@
 namespace itlab
 {
 
+    using std::ios;
+    using std::setw;
+    using std::setiosflags;
+    using std::setprecision;
+
     class IIR : public DFD
     {
 
