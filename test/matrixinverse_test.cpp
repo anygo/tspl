@@ -24,9 +24,13 @@ int main()
 	A[0][0] = 1;	A[0][1] = 2;	A[0][2] = 1;
 	A[1][0] = 2;	A[1][1] = 5;	A[1][2] = 4;
 	A[2][0] = 1;	A[2][1] = 1;	A[2][2] = 0;
+	cout << "The original matrix A is : " << A << endl;
 	invA = inv(A);
-    cout << "The original matrix A is : " << A << endl;
-    cout << "The invse matrix of A : " << invA << endl;
+	cout << "The invse matrix of A (LUD based) : " << invA << endl;
+    invA = colPivInv(A);
+    cout << "The invse matrix of A (column pivot Based) : " << invA << endl;
+    invA = cmpPivInv(A);
+    cout << "The invse matrix of A (complete pivot Based) : " << invA << endl;
     cout << "The product of A and its inverse: " << prod(A,invA) << endl << endl;
 
 	A.resize( 5, 5 );
@@ -40,9 +44,13 @@ int main()
             else
                 A(i,j) = j;
 	}
+	cout << "The original matrix A is : " << A << endl;
 	invA = inv(A,"sys");
-    cout << "The original matrix A is : " << A << endl;
-    cout << "The invse matrix of A : " << invA << endl;
+    cout << "The invse matrix of A (LUD based) : " << invA << endl;
+    invA = colPivInv(A);
+    cout << "The invse matrix of A (column pivot Based) : " << invA << endl;
+    invA = cmpPivInv(A);
+    cout << "The invse matrix of A (complete pivot Based) : " << invA << endl;
     cout << "The product of A and its inverse: " << prod(A,invA) << endl << endl;
 
     A.resize( 8, 6 );
@@ -57,7 +65,7 @@ int main()
 	invA = pinv(A);
 	cout << "The original matrix A is : " << A << endl;
     cout << "The pseudoinvse matrix of A : " << invA << endl;
-    cout << "The product of A and its inverse: " << prod(A,invA) << endl << endl;
+    cout << "The product of A and its inverse: " << prod(A,invA) << endl;
 
 	return 0;
 }

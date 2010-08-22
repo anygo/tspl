@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include <wft.h>
-#include <mathfunc.h>
+#include <vectormath.h>
 #include <timing.h>
 
 
@@ -22,7 +22,7 @@ using namespace itlab;
 const   int Lg = 128;
 const   int Ls = 1000;
 const   int Fs = 1000;
-typedef     float   Type;
+typedef     long double   Type;
 
 
 int main()
@@ -31,7 +31,7 @@ int main()
 	Type a = 0;
 	Type b = Ls-1;
 	Vector<Type> t = linspace(a,b,Ls) / Type(Fs);
-	Vector<Type> s = vsin( Type(400*PI) * vpow(t,Type(2.0)) );
+	Vector<Type> s = sin( Type(400*PI) * pow(t,Type(2.0)) );
 
 	/******************************** [ widow ] ******************************/
 	a = 0;

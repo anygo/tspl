@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include <cwt.h>
-#include <mathfunc.h>
+#include <vectormath.h>
 #include <utilities.h>
 #include <statistics.h>
 #include <timing.h>
@@ -30,7 +30,7 @@ int main()
 
 	/******************************* [ signal ] ******************************/
 	Vector<double> t = linspace( 0.0, (Ls-1)/fs, Ls );
-	Vector<double> st = vsin( 200*PI*vpow(t,2.0) );
+	Vector<double> st = sin( 200*PI*pow(t,2.0) );
 	st = st-mean(st);
 
 	/******************************** [ CWT ] ********************************/
@@ -61,7 +61,7 @@ int main()
 
     /******************************* [ signal ] ******************************/
     Vector<float> tf = linspace( float(0.0), (Ls-1)/float(fs), Ls );
-	Vector<float> stf = vsin( float(200*PI) * vpow(tf,float(2.0) ) );
+	Vector<float> stf = sin( float(200*PI) * pow(tf,float(2.0) ) );
 	stf = stf-mean(stf);
 
 	/******************************** [ CWT ] ********************************/

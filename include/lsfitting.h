@@ -16,6 +16,7 @@
 
 
 #include <matrix.h>
+#include <linequs1.h>
 #include <functions.h>
 #include <interpolation.h>
 

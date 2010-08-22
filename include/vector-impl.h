@@ -3,7 +3,7 @@
  *
  * Implementation for Vector class.
  *
- * Zhang Ming, 2010-01, Xi'an Jiaotong University.
+ * Zhang Ming, 2010-01 (revised 2010-08), Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -267,339 +267,110 @@ Vector<Type>& Vector<Type>::resize( int length )
 
 
 /**
- * return vector's reversion
+ * compound assignment operators +=
  */
 template <typename Type>
-Vector<Type> Vector<Type>::reverse()
+Vector<Type>& Vector<Type>::operator+=( const Type &x )
 {
-	Vector<Type> tmp(nRow);
-	Vector<Type>::iterator  ie = (*this).end(),
-                            ib = tmp.begin();
+    iterator itr = (*this).begin();
+    while( itr != (*this).end() )
+        *itr++ += x;
 
-    while( ib != tmp.end() )
-        *ib++ = *--ie;
+	return *this;
+}
 
-    return tmp;
+template <typename Type>
+Vector<Type>& Vector<Type>::operator+=( const Vector<Type> &rhs )
+{
+    assert( nRow == rhs.dim() );
+
+    iterator itrL = (*this).begin();
+    const_iterator itrR = rhs.begin();
+    while( itrL != (*this).end() )
+        *itrL++ += *itrR++;
+
+	return *this;
 }
 
 
 /**
- * get negative vector
+ * compound assignment operators -=
  */
-template<typename Type>
-Vector<Type> operator-( const Vector<Type> &v )
+template <typename Type>
+Vector<Type>& Vector<Type>::operator-=( const Type &x )
 {
-	int N = v.dim();
-	Vector<Type> tmp( N );
+    iterator itr = (*this).begin();
+    while( itr != (*this).end() )
+        *itr++ -= x;
 
-	for( int i=0; i<N; ++i )
-		tmp[i] = -v[i];
+	return *this;
+}
 
-	return tmp;
+template <typename Type>
+Vector<Type>& Vector<Type>::operator-=( const Vector<Type> &rhs )
+{
+    assert( nRow == rhs.dim() );
+
+    iterator itrL = (*this).begin();
+    const_iterator itrR = rhs.begin();
+    while( itrL != (*this).end() )
+        *itrL++ -= *itrR++;
+
+	return *this;
 }
 
 
 /**
- * vector-scalar addition.
+ * compound assignment operators *=
  */
 template <typename Type>
-Vector<Type> operator+( const Vector<Type> &v, Type x )
+Vector<Type>& Vector<Type>::operator*=( const Type &x )
 {
-	int N = v.dim();
-	Vector<Type> tmp( N );
+    iterator itr = (*this).begin();
+    while( itr != (*this).end() )
+        *itr++ *= x;
 
-	for( int i=0; i<N; ++i )
-		tmp[i] = v[i] + x;
-
-	return tmp;
+	return *this;
 }
 
 template <typename Type>
-inline Vector<Type> operator+( Type x, const Vector<Type> &v )
+Vector<Type>& Vector<Type>::operator*=( const Vector<Type> &rhs )
 {
-	return v+x;
-}
+    assert( nRow == rhs.dim() );
 
-template <typename Type>
-Vector<Type> operator+=( Vector<Type> &v, Type x )
-{
-	int N = v.dim();
-	for( int i=0; i<N; ++i )
-		v[i] += x;
+    iterator itrL = (*this).begin();
+    const_iterator itrR = rhs.begin();
+    while( itrL != (*this).end() )
+        *itrL++ *= *itrR++;
 
-	return v;
+	return *this;
 }
 
 
 /**
- * vector-scalar substraction.
+ * compound assignment operators /=
  */
 template <typename Type>
-Vector<Type> operator-( const Vector<Type> &v, Type x )
+Vector<Type>& Vector<Type>::operator/=( const Type &x )
 {
-	int N = v.dim();
-	Vector<Type> tmp( N );
+    iterator itr = (*this).begin();
+    while( itr != (*this).end() )
+        *itr++ /= x;
 
-	for( int i=0; i<N; ++i )
-		tmp[i] = v[i] - x;
-
-	return tmp;
+	return *this;
 }
 
 template <typename Type>
-Vector<Type> operator-( Type x, const Vector<Type> &v )
+Vector<Type>& Vector<Type>::operator/=( const Vector<Type> &rhs )
 {
-	int N = v.dim();
-	Vector<Type> tmp( N );
+    assert( nRow == rhs.dim() );
 
-	for( int i=0; i<N; ++i )
-		tmp[i] = x - v[i];
+    iterator itrL = (*this).begin();
+    const_iterator itrR = rhs.begin();
+    while( itrL != (*this).end() )
+        *itrL++ /= *itrR++;
 
-	return tmp;
-}
-
-template <typename Type>
-Vector<Type> operator-=( Vector<Type> &v, Type x )
-{
-	int N = v.dim();
-	for( int i=0; i<N; ++i )
-		v[i] -= x;
-
-	return v;
-}
-
-
-/**
- * vector-scalar multiplication.
- */
-template <typename Type>
-Vector<Type> operator*( const Vector<Type> &v, Type x )
-{
-	int N = v.dim();
-	Vector<Type> tmp( N );
-
-	for( int i=0; i<N; ++i )
-		tmp[i] = v[i] * x;
-
-	return tmp;
-}
-
-template <typename Type>
-inline Vector<Type> operator*( Type x, const Vector<Type> &v )
-{
-	return v*x;
-}
-
-template <typename Type>
-Vector<Type> operator*=( Vector<Type> &v, Type x )
-{
-	int N = v.dim();
-	for( int i=0; i<N; ++i )
-		v[i] *= x;
-
-	return v;
-}
-
-
-/**
- * vector-scalar division.
- */
-template <typename Type>
-Vector<Type> operator/( const Vector<Type> &v, Type x )
-{
-	int N = v.dim();
-	Vector<Type> tmp( N );
-
-	for( int i=0; i<N; ++i )
-		tmp[i] = v[i] / x;
-
-	return tmp;
-}
-
-template <typename Type>
-Vector<Type> operator/( Type x, const Vector<Type> &v )
-{
-	int N = v.dim();
-	Vector<Type> tmp( N );
-
-	for( int i=0; i<N; ++i )
-		tmp[i] = x / v[i];
-
-	return tmp;
-}
-
-template <typename Type>
-Vector<Type> operator/=( Vector<Type> &v, Type x )
-{
-	int N = v.dim();
-	for( int i=0; i<N; ++i )
-		v[i] /= x;
-
-	return v;
-}
-
-
-/**
- * vector-vector addition.
- */
-template <typename Type>
-Vector<Type> operator+( const Vector<Type> &v1, const Vector<Type> &v2 )
-{
-	int N = v1.dim();
-	assert( N == v2.dim() );
-
-	Vector<Type> tmp( N );
-	for( int i=0; i<N; ++i )
-		tmp[i] = v1[i] + v2[i];
-
-	return tmp;
-}
-
-template <typename Type>
-Vector<Type> operator+=( Vector<Type> &v1, const Vector<Type> &v2 )
-{
-	int N = v1.dim();
-	assert( N == v2.dim() );
-
-	for( int i=0; i<N; ++i )
-		v1[i] += v2[i];
-
-	return v1;
-}
-
-
-/**
- * vector-vector substraction.
- */
-template <typename Type>
-Vector<Type> operator-( const Vector<Type> &v1, const Vector<Type> &v2 )
-{
-	int N = v1.dim();
-	assert( N == v2.dim() );
-
-	Vector<Type> tmp( N );
-	for( int i=0; i<N; ++i )
-		tmp[i] = v1[i] - v2[i];
-
-	return tmp;
-}
-
-template <typename Type>
-Vector<Type> operator-=( Vector<Type> &v1, const Vector<Type> &v2 )
-{
-	int N = v1.dim();
-	assert( N == v2.dim() );
-
-	for( int i=0; i<N; ++i )
-		v1[i] -= v2[i];
-
-	return v1;
-}
-
-
-/**
- * vector-vector multiplication.
- */
-template <typename Type>
-Vector<Type> operator*( const Vector<Type> &v1, const Vector<Type> &v2 )
-{
-	int N = v1.dim();
-	assert( N == v2.dim() );
-
-	Vector<Type> tmp( N );
-	for( int i=0; i<N; ++i )
-		tmp[i] = v1[i] * v2[i];
-
-	return tmp;
-}
-
-template <typename Type>
-Vector<Type> operator*=( Vector<Type> &v1, const Vector<Type> &v2 )
-{
-	int N = v1.dim();
-	assert( N == v2.dim() );
-
-	for( int i=0; i<N; ++i )
-		v1[i] *= v2[i];
-
-	return v1;
-}
-
-
-/**
- * vector-vector division.
- */
-template <typename Type>
-Vector<Type> operator/( const Vector<Type> &v1, const Vector<Type> &v2 )
-{
-	int N = v1.dim();
-	assert( N == v2.dim() );
-
-	Vector<Type> tmp( N );
-	for( int i=0; i<N; ++i )
-		tmp[i] = v1[i] / v2[i];
-
-	return tmp;
-}
-
-template <typename Type>
-Vector<Type> operator/=( Vector<Type> &v1, const Vector<Type> &v2 )
-{
-	int N = v1.dim();
-	assert( N == v2.dim() );
-
-	for( int i=0; i<N; ++i )
-		v1[i] /= v2[i];
-
-	return v1;
-}
-
-
-/**
- * Inner product for vectors.
- */
-template <typename Type>
-Type dotProd( const Vector<Type> &v1, const Vector<Type> &v2 )
-{
-	int N = v1.dim();
-	assert( N == v2.dim() );
-
-	Type sum = 0;
-	for( int i=0; i<N; ++i )
-		sum += v1[i] * v2[i];
-
-	return sum;
-}
-
-
-/**
- * Vector's sum.
- */
-template <typename Type>
-Type sum( const Vector<Type> &v )
-{
-	int N = v.dim();
-	Type sum = 0;
-
-	for( int i=0; i<N; ++i )
-		sum +=  v[i];
-	return sum;
-}
-
-
-/**
- * Vector's norm in Euclidean space.
- */
-template <typename Type>
-Type norm( const Vector<Type> &v )
-{
-	int N = v.dim();
-	Type sum = 0;
-
-	for( int i=0; i<N; ++i )
-		sum +=  v[i] * v[i];
-
-	return sqrt(sum);
+	return *this;
 }
 
 
@@ -607,7 +378,7 @@ Type norm( const Vector<Type> &v )
  * Overload the output stream function.
  */
 template <typename Type>
-std::ostream& operator<<( std::ostream &out, const Vector<Type> &v )
+ostream& operator<<( ostream &out, const Vector<Type> &v )
 {
 	int N = v.dim();
 	out << "size: " << N << " by 1" << "\n";
@@ -623,7 +394,7 @@ std::ostream& operator<<( std::ostream &out, const Vector<Type> &v )
  * Overload the input stream function.
  */
 template <typename Type>
-std::istream& operator>>( std::istream &in, Vector<Type> &v )
+istream& operator>>( istream &in, Vector<Type> &v )
 {
 	int N;
 	in >> N;
@@ -635,4 +406,238 @@ std::istream& operator>>( std::istream &in, Vector<Type> &v )
 		in >> v[i];
 
 	return in;
+}
+
+
+/**
+ * get negative vector
+ */
+template <typename Type>
+Vector<Type> operator-( const Vector<Type> &v )
+{
+	Vector<Type> tmp( v.dim() );
+    typename Vector<Type>::iterator itrL = tmp.begin();
+    typename Vector<Type>::const_iterator itrR = v.begin();
+
+    while( itrL != tmp.end() )
+        *itrL++ = -(*itrR++);
+
+    return tmp;
+}
+
+
+/**
+ * vector-scalar addition.
+ */
+template <typename Type>
+inline Vector<Type> operator+( const Vector<Type> &v, const Type &x )
+{
+	Vector<Type> tmp( v );
+	return tmp += x;
+}
+
+template <typename Type>
+inline Vector<Type> operator+( const Type &x, const Vector<Type> &v )
+{
+	return v+x;
+}
+
+
+/**
+ * vector-scalar substraction.
+ */
+template <typename Type>
+inline Vector<Type> operator-( const Vector<Type> &v, const Type &x )
+{
+	Vector<Type> tmp( v );
+	return tmp -= x;
+}
+
+template <typename Type>
+inline Vector<Type> operator-( const Type &x, const Vector<Type> &v )
+{
+	Vector<Type> tmp( v );
+	return -tmp += x;
+}
+
+
+/**
+ * vector-scalar multiplication.
+ */
+template <typename Type>
+inline Vector<Type> operator*( const Vector<Type> &v, const Type &x )
+{
+	Vector<Type> tmp( v );
+	return tmp *= x;
+}
+
+template <typename Type>
+inline Vector<Type> operator*( const Type &x, const Vector<Type> &v )
+{
+	return v*x;
+}
+
+
+/**
+ * vector-scalar division.
+ */
+template <typename Type>
+inline Vector<Type> operator/( const Vector<Type> &v, const Type &x )
+{
+	Vector<Type> tmp( v );
+	return tmp /= x;
+}
+
+template <typename Type>
+inline Vector<Type> operator/( const Type &x, const Vector<Type> &v )
+{
+	int N = v.dim();
+	Vector<Type> tmp( N );
+
+	for( int i=0; i<N; ++i )
+		tmp[i] = x / v[i];
+
+	return tmp;
+}
+
+
+/**
+ * vector-vector addition.
+ */
+template <typename Type>
+inline Vector<Type> operator+( const Vector<Type> &v1, const Vector<Type> &v2 )
+{
+    Vector<Type> tmp( v1 );
+	return tmp += v2;
+}
+
+
+/**
+ * vector-vector substraction.
+ */
+template <typename Type>
+inline Vector<Type> operator-( const Vector<Type> &v1, const Vector<Type> &v2 )
+{
+    Vector<Type> tmp( v1 );
+	return tmp -= v2;
+}
+
+
+/**
+ * vector-vector multiplication.
+ */
+template <typename Type>
+inline Vector<Type> operator*( const Vector<Type> &v1, const Vector<Type> &v2 )
+{
+    Vector<Type> tmp( v1 );
+	return tmp *= v2;
+}
+
+
+/**
+ * vector-vector division.
+ */
+template <typename Type>
+inline Vector<Type> operator/( const Vector<Type> &v1, const Vector<Type> &v2 )
+{
+    Vector<Type> tmp( v1 );
+	return tmp /= v2;
+}
+
+
+/**
+ * Vector's sum.
+ */
+template <typename Type>
+Type sum( const Vector<Type> &v )
+{
+    Type sum = 0;
+    typename Vector<Type>::const_iterator itr = v.begin();
+
+    while( itr != v.end() )
+		sum += *itr++;
+
+	return sum;
+}
+
+
+/**
+ * Minimum value of vector.
+ */
+template <typename Type>
+Type min( const Vector<Type> &v )
+{
+    Type m = v[0];
+    for( int i=1; i<v.size(); ++i )
+        if( m > v[i] )
+            m = v[i];
+
+    return m;
+}
+
+
+/**
+ * Maximum value of vector.
+ */
+template <typename Type>
+Type max( const Vector<Type> &v )
+{
+    Type M = v[0];
+    for( int i=1; i<v.size(); ++i )
+        if( M < v[i] )
+            M = v[i];
+
+    return M;
+}
+
+
+/**
+ * Vector's norm in Euclidean space.
+ */
+template <typename Type>
+Type norm( const Vector<Type> &v )
+{
+	Type sum = 0;
+	typename Vector<Type>::const_iterator itr = v.begin();
+
+	while( itr != v.end() )
+	{
+	    sum += (*itr) * (*itr);
+	    itr++;
+	}
+
+	return Type(sqrt(1.0*sum));
+}
+
+
+/**
+ * return vector's reversion
+ */
+template <typename Type>
+void swap( Vector<Type> &lhs, Vector<Type> &rhs )
+{
+    typename Vector<Type>::iterator itrL = lhs.begin(),
+                                    itrR = rhs.begin();
+
+    while( itrL != lhs.end() )
+        std::swap( *itrL++, *itrR++ );
+}
+
+
+/**
+ * Inner product for vectors.
+ */
+template <typename Type>
+Type dotProd( const Vector<Type> &v1, const Vector<Type> &v2 )
+{
+	assert( v1.dim() == v2.dim() );
+
+    Type sum = 0;
+    typename Vector<Type>::const_iterator itr1 = v1.begin();
+    typename Vector<Type>::const_iterator itr2 = v2.begin();
+
+    while( itr1 != v1.end() )
+		sum += (*itr1++) * (*itr2++);
+
+	return sum;
 }

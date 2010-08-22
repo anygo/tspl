@@ -42,6 +42,12 @@ int main()
 	     << x << endl;
 
 	cout << "Flipping vector v1 from left to right : " << flip(v1) << endl;
+	cout << "Shift vector v1 from left to right : " << shift(v1,2) << endl;
+	cout << "Shift vector v1 from right to left : " << shift(v1,-2) << endl;
+	cout << "Circle shift vector v1 from left to right : " << circshift(v1,2) << endl;
+	cout << "Circle shift vector v1 from right to left : " << circshift(v1,-2) << endl;
+	cout << "FFT shift of vector : " << fftshift(v1) << endl;
+
 	cout << "Dyadic upsampling of vector v1 by zeros at the even position : "
 		 << dyadUp( v1,0 ) << endl;
 	cout << "Dyadic upsampling of vector v1 by zeros at the odd position : "
@@ -92,6 +98,7 @@ int main()
 		 << wkeep( v1,3,2 ) << endl;
 
 	cout << "The convolution of vector v1 and v2 : " << conv( v1,v2 ) << endl;
+	cout << "The convolution of vector v2 and v1 : " << conv( v2,v1 ) << endl;
 
 	cout << "The modulus of 2 divided by 5 is " << mod(2,5) << "." << endl;
 	cout << "The modulus of -1 divided by 5 is " << mod(-1,5) << "." << endl;

@@ -10,7 +10,6 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include <constants.h>
 #include <spline3interp.h>
 
 

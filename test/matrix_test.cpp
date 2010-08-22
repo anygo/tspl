@@ -51,7 +51,7 @@ int main()
 	cout << "the diagonal matrix of m3 : " << diag( m3 ) << endl;
 	cout << "the transpose matrix of m3 : " << transpose( m3 ) << endl;
 
-    cout << endl << endl << "\t\t\t\tmatrix-scalar operand" << endl << endl;
+    cout << endl << "\t\t\t\tmatrix-scalar operand" << endl << endl;
 	cout << "scalar x = " << x << endl;
 	cout << "m1 + x : " << m1+x << endl;
 	cout << "x + m1 : " << x+m1 << endl;
@@ -70,7 +70,7 @@ int main()
 	m1 /= x;
 	cout << "m1 /= x : " << m1 << endl;
 
-    cout << endl << endl << "\t\t\t\telementwise matrix-matrix operand" << endl << endl;
+    cout << endl << "\t\t\t\telementwise matrix-matrix operand" << endl << endl;
 	cout << "m1 + m2 : " << m1 + m2 << endl;
 	m1 += m2;
 	cout << "m1 += m2 : " << m1 << endl;
@@ -84,20 +84,15 @@ int main()
 	m1 /= m2;
 	cout << "m1 /= m2 : " << m1 << endl;
 
-	cout << endl << endl << "\t\t\t\tmatrix-matrix operand" << endl << endl;
+	cout << endl << "\t\t\t\tmatrix-matrix operand" << endl << endl;
 	cout << "m1 * m2 : " << prod(m1, m2) << endl;
 	cout << "m1' * m2 : " << tranProd(m1, m2) << endl;
 
-    cout << endl << endl << "\t\t\t\tmatrix-vector operand" << endl << endl;
+    cout << endl << "\t\t\t\tmatrix-vector operand" << endl << endl;
     Vector<double> v1( 3, 2 );
 	cout << "vector v1 : " << v1 << endl;
 	cout << "m1 * v1 : " << prod(m1, v1) << endl;
 	cout << "m1' * v1 : " << tranProd(m1, v1) << endl;
-
-	cout << "Please input a sqare matrix mtr." << endl;
-	Matrix<double> mtr;
-	cin >> mtr;
-	cout << "the inverse matrix of mtr : " << inverse( mtr ) << endl;
 
 	Matrix<int> m4( 4, 5 );
 	Vector<int> v2(5);

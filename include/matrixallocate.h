@@ -1,5 +1,5 @@
 /*****************************************************************************
- *                                    matrixallocate.h
+ *                               matrixallocate.h
  *
  * Allocate and delete two dimension array (matrix).
  *
@@ -14,30 +14,11 @@
 namespace itlab
 {
 
-    /**
-     * Allocate matrix by specified rows and columns.
-     */
-    template<typename Type>
-    inline void makeMatrix( Type **&m, int rows, int cols )
-    {
-        m = new Type*[rows];
-        for( int i=0; i<rows; ++i )
-            m[i] = new Type[cols];
-    }
+    template<typename Type> void makeMatrix( Type **&, int, int );
+    template<typename Type> void deleteMatrix( Type **&, int );
 
 
-    /**
-     * Delete the matrix with specified rows.
-     */
-    template<typename Type>
-    inline void deleteMatrix( Type **&m, int rows )
-    {
-        for( int i=0; i<rows; ++i )
-            delete []m[i];
-
-        delete []m;
-        m = 0;
-    }
+    #include <matrixallocate-impl.h>
 
 }
 

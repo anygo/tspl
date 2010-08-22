@@ -251,7 +251,7 @@ bool IIR::orderEst()
     if( n > 200 )
         return false;
 
-    order = int( ceil(n) );
+    order = int( std::ceil(n) );
     return true;
 }
 

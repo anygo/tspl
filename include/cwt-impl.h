@@ -36,7 +36,7 @@ void CWT<Type>::setScales( Type fs, Type fmin, Type fmax, Type dj )
 {
     double  flc = 0,
             fuc = 0,
-            a = pow( 2.0, dj );
+            a = pow( Type(2), dj );
 
     if( waveType == "mexiHat" )
     {
@@ -88,13 +88,13 @@ void CWT<Type>::setTable( int N )
         if( waveType == "mexiHat" )
         {
             omega *= omega;
-            tmp = Type( sqrt(c) ) * ( omega * vexp(Type(-0.5)*omega) );
+            tmp = Type( sqrt(c) ) * ( omega * exp(Type(-0.5)*omega) );
         }
         else if( waveType == "morlet" )
         {
             Type sigma = 6.2;
             omega = Type(-0.5) * ( (omega-sigma)*(omega-sigma) );
-            tmp = Type( sqrt(c) ) * vexp(omega);
+            tmp = Type( sqrt(c) ) * exp(omega);
         }
         else
         {

@@ -3,23 +3,22 @@
  *
  * Class template of matrix which is designed for basic linear algebra
  * operations such as:
- *                      A  +   x    x  +   A    A  +=  x
- *                      A  -   x    x  -   A    A  -=  x
- *                      A  *   x    x  *   A    A  *=  x
- *                      A  /   x    x  /   A    A  /=  x
- *                      A1  +  A2   A1 +=  A2
- *                      A1  -  A2   A1 -=  A2
- *                      A1  *  A2   A1 *=  A2
- *                      A1  /  A2   A1 /=  A2
+ *              A + x    x + A    A += x    A1 + A2   A1 += A2
+ *              A - x    x - A    A -= x    A1 - A2   A1 -= A2
+ *              A * x    x * A    A *= x    A1 * A2   A1 *= A2
+ *              A / x    x / A    A /= x    A1 / A2   A1 /= A2
+ *          norm(A)       transpose(A)   diag(A)         eye(N)
+ *          prod(A1,A2)   prod(A,b)      tranProd(A,B)   tranProd(A,b)
  *
- *          norm( A )       transpose( A )   diag( A )          inverse( A )
- *          prod( A1, A2 )  prod( A, b )     tranProd( A, B )   tranProd( A, b )
+ * The class also provides the basic math functions such as:
+ *              cos    sin    tan    acos   asin   atan
+ *              abs    exp    log    log10  sqrt   pow
  *
  * When debugging, use #define BOUNDS_CHECK above your "#include matrix.h"
  * line. When done debugging, comment out #define BOUNDS_CHECK for better
  * performance.
  *
- * Zhang Ming, 2010-01, Xi'an Jiaotong University.
+ * Zhang Ming, 2010-01 (revised 2010-08), Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -27,7 +26,6 @@
 #define MATRIX_H
 
 
-#include <constants.h>
 #include <vector.h>
 
 
@@ -72,6 +70,16 @@ namespace itlab
         void setRow( const Vector<Type> &v, int row );
         void setColumn( const Vector<Type> &v, int column );
 
+        // computed assignment
+        Matrix<Type>& operator+=( const Type& );
+        Matrix<Type>& operator-=( const Type& );
+        Matrix<Type>& operator*=( const Type& );
+        Matrix<Type>& operator/=( const Type& );
+        Matrix<Type>& operator+=( const Matrix<Type>& );
+        Matrix<Type>& operator-=( const Matrix<Type>& );
+        Matrix<Type>& operator*=( const Matrix<Type>& );
+        Matrix<Type>& operator/=( const Matrix<Type>& );
+
     private:
 
         // 0-based and 1-based data pointer
@@ -92,6 +100,44 @@ namespace itlab
 
     };
     // class Matrix
+
+    // input and output
+    template<typename Type> ostream& operator<<( ostream&, const Matrix<Type>& );
+    template<typename Type> istream& operator>>( istream&, Matrix<Type>& );
+
+    // arithmetic operators
+    template<typename Type> Matrix<Type> operator-( const Matrix<Type>& );
+    template<typename Type> Matrix<Type> operator+( const Matrix<Type>&, const Type& );
+    template<typename Type> Matrix<Type> operator+( const Type&, const Matrix<Type>& );
+    template<typename Type> Matrix<Type> operator+( const Matrix<Type>&, const Matrix<Type>& );
+    template<typename Type> Matrix<Type> operator-( const Matrix<Type>&, const Type& );
+    template<typename Type> Matrix<Type> operator-( const Type&, const Matrix<Type>& );
+    template<typename Type> Matrix<Type> operator-( const Matrix<Type>&, const Matrix<Type>& );
+    template<typename Type> Matrix<Type> operator*( const Matrix<Type>&, const Type& );
+    template<typename Type> Matrix<Type> operator*( const Type&, const Matrix<Type>& );
+    template<typename Type> Matrix<Type> operator*( const Matrix<Type>&, const Matrix<Type>& );
+    template<typename Type> Matrix<Type> operator/( const Matrix<Type>&, const Type& );
+    template<typename Type> Matrix<Type> operator/( const Type&, const Matrix<Type>& );
+    template<typename Type> Matrix<Type> operator/( const Matrix<Type>&, const Matrix<Type>& );
+
+    // utilities
+    template<typename Type> Type norm( const Matrix<Type>& );
+    template<typename Type> void swap( Matrix<Type>&, Matrix<Type>& );
+    template<typename Type> Vector<Type> sum( const Matrix<Type>& );
+    template<typename Type> Vector<Type> min( const Matrix<Type>& );
+    template<typename Type> Vector<Type> max( const Matrix<Type>& );
+
+    // linear algebra
+    template<typename Type> Matrix<Type> eye( int, const Type& );
+    template<typename Type> Vector<Type> diag( const Matrix<Type>& );
+    template<typename Type> Matrix<Type> transpose( const Matrix<Type>& );
+    template<typename Type> Matrix<Type>& prod( const Matrix<Type>&, const Matrix<Type>&, Matrix<Type>& );
+    template<typename Type> Vector<Type>& prod( const Matrix<Type>&, const Vector<Type>&, Vector<Type>& );
+    template<typename Type> Matrix<Type> prod( const Matrix<Type>&, const Matrix<Type>& );
+    template<typename Type> Vector<Type> prod( const Matrix<Type>&, const Vector<Type>& );
+    template<typename Type> Matrix<Type> tranProd( const Matrix<Type>&, const Matrix<Type>& );
+    template<typename Type> Vector<Type> tranProd( const Matrix<Type>&, const Vector<Type>& );
+    template<typename Type> Matrix<Type> tranProd( const Vector<Type>&, const Vector<Type>& );
 
 
     #include <matrix-impl.h>

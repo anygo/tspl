@@ -3,23 +3,21 @@
  *
  * Class template of vector which is designed for basic linear algebra
  * operations such as:
- *                      v  +   k    k  +   v    v  +=  k
- *                      v  -   k    k  -   v    v  -=  k
- *                      v  *   k    k  *   v    v  *=  k
- *                      v  /   k    k  /   v    v  /=  k
- *                      v1  +  v2   v1 +=  v2
- *                      v1  -  v2   v1 -=  v2
- *                      v1  *  v2   v1 *=  v2
- *                      v1  /  v2   v1 /=  v2
- *                      -v
+ *              v + k    k + v    v += k    v1 + v2    v1 += v2
+ *              v - k    k - v    v -= k    v1 - v2    v1 -= v2
+ *              v * k    k * v    v *= k    v1 * v2    v1 *= v2
+ *              v / k    k / v    v /= k    v1 / v2    v1 /= v2
+ *      reverse(v)    swap(v1,v2)    sum(v)    norm(v)    dotProd( v1, v2 )
  *
- *                      norm( v )   dotProd( v1, v2 )
+ * The class also provides the basic math functions such as:
+ *              cos    sin    tan    acos   asin   atan
+ *              abs    exp    log    log10  sqrt   pow
  *
  * When debugging, use #define BOUNDS_CHECK above your "#include vector.h"
  * line. When done debugging, comment out #define BOUNDS_CHECK for better
  * performance.
  *
- * Zhang Ming, 2010-01, Xi'an Jiaotong University.
+ * Zhang Ming, 2010-01 (revised 2010-08), Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -28,11 +26,11 @@
 
 
 #include <iostream>
-#include <cmath>
 #include <cassert>
-
-
-using namespace std;
+#include <cmath>
+#include <complex>
+#include <usingdeclare.h>
+#include <constants.h>
 
 
 namespace itlab
@@ -69,14 +67,6 @@ namespace itlab
         const_iterator begin() const;
         iterator end();
         const_iterator end() const;
-//        iterator begin()
-//        {   return pv0; }
-//        const iterator begin() const
-//        {   return pv0; }
-//        iterator end()
-//        {   return pv0+nRow; }
-//        const iterator end() const
-//        {   return pv0+nRow; }
 
         // type conversion
         operator Type*();
@@ -86,7 +76,16 @@ namespace itlab
         int size() const;
         int dim() const;
         Vector<Type>& resize( int length );
-        Vector<Type> reverse();
+
+        // computed assignment
+        Vector<Type>& operator+=( const Type& );
+        Vector<Type>& operator-=( const Type& );
+        Vector<Type>& operator*=( const Type& );
+        Vector<Type>& operator/=( const Type& );
+        Vector<Type>& operator+=( const Vector<Type>& );
+        Vector<Type>& operator-=( const Vector<Type>& );
+        Vector<Type>& operator*=( const Vector<Type>& );
+        Vector<Type>& operator/=( const Vector<Type>& );
 
     private:
 
@@ -106,6 +105,34 @@ namespace itlab
 
     };
     // class Vector
+
+
+    // input and output
+    template<typename Type> ostream& operator<<( ostream&, const Vector<Type>& );
+    template<typename Type> istream& operator>>( istream&, Vector<Type>& );
+
+    // arithmetic operators
+    template<typename Type> Vector<Type> operator-( const Vector<Type>& );
+    template<typename Type> Vector<Type> operator+( const Vector<Type>&, const Type& );
+    template<typename Type> Vector<Type> operator+( const Type&, const Vector<Type>& );
+    template<typename Type> Vector<Type> operator+( const Vector<Type>&, const Vector<Type>& );
+    template<typename Type> Vector<Type> operator-( const Vector<Type>&, const Type& );
+    template<typename Type> Vector<Type> operator-( const Type&, const Vector<Type>& );
+    template<typename Type> Vector<Type> operator-( const Vector<Type>&, const Vector<Type>& );
+    template<typename Type> Vector<Type> operator*( const Vector<Type>&, const Type& );
+    template<typename Type> Vector<Type> operator*( const Type&, const Vector<Type>& );
+    template<typename Type> Vector<Type> operator*( const Vector<Type>&, const Vector<Type>& );
+    template<typename Type> Vector<Type> operator/( const Vector<Type>&, const Type& );
+    template<typename Type> Vector<Type> operator/( const Type&, const Vector<Type>& );
+    template<typename Type> Vector<Type> operator/( const Vector<Type>&, const Vector<Type>& );
+
+    // utilities
+    template<typename Type> Type sum( const Vector<Type>& );
+    template<typename Type> Type min( const Vector<Type>& );
+    template<typename Type> Type max( const Vector<Type>& );
+    template<typename Type> Type norm( const Vector<Type>& );
+    template<typename Type> void swap( Vector<Type>&, Vector<Type>& );
+    template<typename Type> Type dotProd( const Vector<Type>&, const Vector<Type>& );
 
 
     #include <vector-impl.h>

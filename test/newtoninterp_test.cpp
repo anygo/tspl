@@ -10,7 +10,6 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include <constants.h>
 #include <newtoninterp.h>
 
 
@@ -23,7 +22,7 @@ int main()
     Vector<double> x(5),
                    y(5);
     x[0] = 0; x[1] = 30;  x[2] = 45;        x[3] = 60;        x[4] = 90;
-    y[0] = 0; y[1] = 0.5; y[2] = sqrt(2)/2; y[3] = sqrt(3)/2; y[4] = 1;
+    y[0] = 0; y[1] = 0.5; y[2] = sqrt(2.0)/2; y[3] = sqrt(3.0)/2; y[4] = 1;
 
     NewtonInterp<double> poly(x,y);
     poly.calcCoefs();
