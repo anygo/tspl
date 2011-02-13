@@ -3,65 +3,66 @@
  *
  * Cholesky class testing.
  *
- * Zhang Ming, 2010-01, Xi'an Jiaotong University.
+ * Zhang Ming, 2010-01 (revised 2010-12), Xi'an Jiaotong University.
  *****************************************************************************/
 
 
 #define BOUNDS_CHECK
 
 #include <iostream>
+#include <iomanip>
 #include <cholesky.h>
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
-const int N = 5;
+typedef double  Type;
+const   int     N = 5;
 
 
 int main()
 {
-	Matrix<double> A(N,N), L(N,N), B(N,N);
-	Vector<double> b(N);
+	Matrix<Type> A(N,N), L(N,N);
+	Vector<Type> b(N);
 
 	for( int i=1; i<N+1; ++i )
 	{
 		for( int j=1; j<N+1; ++j )
 			if( i == j )
-			{
 				A(i,i) = i;
-				B(i,i) = 1;
-			}
 			else
-			{
 				if( i < j )
 					A(i,j) = i;
 				else
 					A(i,j) = j;
 
-				B(i,j) = 0;
-			}
-
-		b(i) = i*(i+1)/2 + i*(N-i);
+		b(i) = i*(i+1)/2.0 + i*(N-i);
 	}
 
-	Cholesky<double> cho;
-    cho.dec(A);
-	if( cho.isSpd() )
-		L = cho.getL();
-	else
-		cout << "Factorization was not complete." << endl;
-
+	cout << setiosflags(ios::fixed) << setprecision(3);
 	cout << "The original matrix A : " << A << endl;
-	cout << "The lower triangular matrix L is : " << L << endl;
+	Cholesky<Type> cho;
+    cho.dec(A);
 
-	Vector<double> x = cho.solve(b);
-	cout << "The constant vector b : " << b << endl;
-	cout << "The solution of Ax = b : " << x << endl;
+	if( !cho.isSpd() )
+		cout << "Factorization was not complete." << endl;
+	else
+    {
+        L = cho.getL();
+        cout << "The lower triangular matrix L is : " << L << endl;
+        cout << "A - L*L^T is : " << A - L*trT(L) << endl;
 
-	Matrix<double> C = cho.solve(B);
-	cout << "The invse matrix of A : " << C << endl;
+        Vector<Type> x = cho.solve(b);
+        cout << "The constant vector b : " << b << endl;
+        cout << "The solution of Ax = b : " << x << endl;
+        cout << "The Ax - b : " << A*x-b << endl;
+
+        Matrix<Type> IA = cho.solve(eye(N,Type(1)));
+        cout << "The inverse matrix of A : " << IA << endl;
+        cout << "The product of  A*inv(A) : " << A*IA << endl;
+    }
 
 	return 0;
 }

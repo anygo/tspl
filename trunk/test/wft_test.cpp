@@ -10,19 +10,19 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include <wft.h>
 #include <vectormath.h>
 #include <timing.h>
+#include <wft.h>
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
-const   int Lg = 128;
-const   int Ls = 1000;
-const   int Fs = 1000;
-typedef     long double   Type;
+typedef long double Type;
+const   int         Lg = 100;
+const   int         Ls = 1000;
+const   int         Fs = 1000;
 
 
 int main()

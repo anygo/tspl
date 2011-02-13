@@ -10,15 +10,16 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include <function.h>
+#include <iomanip>
+#include <objfunc.h>
 #include <bfgs.h>
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
-typedef     double  Type;
+typedef double  Type;
 
 
 int main()
@@ -38,10 +39,13 @@ int main()
         Vector<Type> xmin = bfgs.getOptValue();
         int N = bfgs.getItrNum();
         cout << "The iterative number is:   " << N << endl << endl;
-        cout << "The number of function calculation is:   " << bfgs.getFuncNum() << endl << endl;
+        cout << "The number of function calculation is:   "
+             << bfgs.getFuncNum() << endl << endl;
+        cout << setiosflags(ios::fixed) << setprecision(4);
         cout << "The optimal value of x is:   " << xmin << endl;
         cout << "The minimum value of f(x) is:   " << f(xmin) << endl << endl;
-        cout << "The gradient's norm at x is:   " << bfgs.getGradNorm()[N] << endl << endl;
+        cout << "The gradient's norm at x is:   "
+             << bfgs.getGradNorm()[N] << endl << endl;
     }
     else
         cout << "The optimal solution  cann't be found!" << endl;

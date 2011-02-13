@@ -3,19 +3,20 @@
  *
  * Vector class testing.
  *
- * Zhang Ming, 2010-01, Xi'an Jiaotong University.
+ * Zhang Ming, 2010-01 (revised 2010-12), Xi'an Jiaotong University.
  *****************************************************************************/
 
 
 #define BOUNDS_CHECK
 
-#include <complex>
 #include <iostream>
+#include <iomanip>
+#include <complex>
 #include <vector.h>
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
 const int M = 3;
@@ -105,12 +106,11 @@ int main()
 	v3 /= v1;
 	cout << "v3 /= v1 : " << v3 << endl;
 
-	k = dotProd( v1, v2 );
-	cout << "inner product of v1 and v2 : " << endl;
-	cout << k << endl << endl;
-
-	cout << "L2 norm of v3 : ";
-	cout << norm( v3 ) << endl << endl;
+    cout << "minimum element of v1 :   " << min(v1) << endl << endl;
+    cout << "maximum element of v1 :   " << max(v1) << endl << endl;
+    cout << "L2 norm of v3 :   " << norm( v3 ) << endl << endl;
+	cout << "inner product of v1 and v2 :   "
+         << dotProd( v1, v2 ) << endl << endl;
 
 	complex<double> z = -1.0;
 	Vector< complex<double> > v( M );
@@ -119,9 +119,29 @@ int main()
 	v[2] = complex<double>( 1.0,-1.0 );
 	Vector< complex<double> > u = v*z;
 
+    cout << setiosflags(ios::fixed) << setprecision(4);
+    cout << "convert from real to complex vector: "
+         << complexVector(v3) << endl;
+    cout << "convert from real to complex vector: "
+         << complexVector(v3,-v1) << endl;
 	cout << "complex vector v : " << v << endl;
 	cout << "complex vector u = -v : " << u << endl;
+	cout << "norm of coplex vector v : " << norm(v) << endl << endl;
+	cout << "dot product of complex vector v and 1+u: "
+         << dotProd(v,u-z) << endl << endl;
 
+    int N = 5;
+    Vector<double> x = linspace( 0.0, TWOPI, N );
+    Vector< complex<float> > cv(N);
+    for( int i=0; i<N; ++i )
+        cv[i] = complex<float>( float(sin(x[i])), float(cos(x[i])) );
+    cout << "Complex vector vc : " << cv << endl;
+    cout << "Absolute of vc : " << abs(cv) << endl;
+    cout << "Angle of vc : " << arg(cv) << endl;
+    cout << "Real part of vc : " << real(cv) << endl;
+    cout << "Imaginary part of vc : " << imag(cv) << endl;
+
+    cout << resetiosflags(ios::fixed);
 	Vector< Vector<double> > v2d1( M );
 	for( int i=0; i<M; ++i )
 	{
@@ -130,14 +150,15 @@ int main()
 			v2d1[i][j] = double( i+j );
 	}
 
-	cout << "two dimention vector v2d1 : " << endl;
+	cout << "two dimension vector v2d1 : " << endl;
 	Vector< Vector<double> >::const_iterator itrD2 = v2d1.begin();
 	int rowNum = 0;
 	while( itrD2 != v2d1.end() )
 	    cout << "the " << rowNum++ << "th row : " << *itrD2++ << endl;
 
 	Vector< Vector<double> > v2d2 = v2d1+v2d1;
-	cout << "two dimention vector v2d2 = v2d1 + v2d1 : " << v2d2 << endl;
+	cout << "two dimension vector v2d2 = v2d1 + v2d1 : " << v2d2;
+
 
 	return 0;
 }

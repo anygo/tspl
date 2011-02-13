@@ -10,15 +10,16 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include <function.h>
+#include <iomanip>
+#include <objfunc.h>
 #include <steepdesc.h>
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
-typedef     float  Type;
+typedef float  Type;
 
 
 int main()
@@ -39,13 +40,16 @@ int main()
         Vector<Type> xmin = steep.getOptValue();
         int N = steep.getItrNum();
         cout << "The iterative number is:   " << N << endl << endl;
-        cout << "The number of function calculation is:   " << steep.getFuncNum() << endl << endl;
+        cout << "The number of function calculation is:   "
+             << steep.getFuncNum() << endl << endl;
+        cout << setiosflags(ios::fixed) << setprecision(4);
         cout << "The optimal value of x is:   " << xmin << endl;
         cout << "The minimum value of f(x) is:   " << f(xmin) << endl << endl;
-        cout << "The gradient's norm at x is:   " << steep.getGradNorm()[N] << endl << endl;
+        cout << "The gradient's norm at x is:   "
+             << steep.getGradNorm()[N] << endl << endl;
     }
     else
-        cout << "The optimal solution  cann't be found!" << endl;
+        cout << "The optimal solution  can't be found!" << endl;
 
     return 0;
 }

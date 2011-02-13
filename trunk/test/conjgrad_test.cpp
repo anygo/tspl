@@ -1,7 +1,7 @@
 /*****************************************************************************
  *                               conjgrad_test.cpp
  *
- * ConjGrad descent method testing.
+ * Conjugate gradient optimal method testing.
  *
  * Zhang Ming, 2010-03, Xi'an Jiaotong University.
  *****************************************************************************/
@@ -10,15 +10,16 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include <function.h>
+#include <iomanip>
+#include <objfunc.h>
 #include <conjgrad.h>
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
-typedef     double  Type;
+typedef double  Type;
 
 
 int main()
@@ -39,10 +40,13 @@ int main()
         Vector<Type> xmin = prp.getOptValue();
         int N = prp.getItrNum();
         cout << "The iterative number is:   " << N << endl << endl;
-        cout << "The number of function calculation is:   " << prp.getFuncNum() << endl << endl;
+        cout << "The number of function calculation is:   "
+             << prp.getFuncNum() << endl << endl;
+        cout << setiosflags(ios::fixed) << setprecision(4);
         cout << "The optimal value of x is:   " << xmin << endl;
         cout << "The minimum value of f(x) is:   " << f(xmin) << endl << endl;
-        cout << "The gradient's norm at x is:   " << prp.getGradNorm()[N] << endl << endl;
+        cout << "The gradient's norm at x is:   "
+             << prp.getGradNorm()[N] << endl << endl;
     }
     else
         cout << "The optimal solution  cann't be found!" << endl;

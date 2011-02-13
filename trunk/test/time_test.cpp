@@ -13,19 +13,19 @@
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
 int main()
 {
-    int     var = 1;
+    double  var = 1;
     double  runTime = 0;
     Timing  time;
 
     time.start();
     for( int i=0; i<10000; ++i )
         for( int j=0; j<10000; ++j )
-            var = sqrt(i*j);
+            var = sqrt(1.0*i*j);
     time.stop();
     runTime = time.read();
 

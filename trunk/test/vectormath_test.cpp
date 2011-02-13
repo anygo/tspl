@@ -10,12 +10,12 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include <utilities.h>
+#include <iomanip>
 #include <vectormath.h>
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
 int main()
@@ -25,8 +25,9 @@ int main()
 	double  a = 0,
             b = 2*PI;
 	Vector<double> x = linspace( a, b, N );
-	cout << x << endl;
 
+	cout << setiosflags(ios::fixed) << setprecision(4);
+	cout << x << endl;
 	cout << "sin of x : " << sin(x) << endl;
 	cout << "cos of x : "<< cos(x) << endl;
 	cout << "tan of x : " << tan(x) << endl;
@@ -45,15 +46,6 @@ int main()
 	cout << "pow of x : " << pow(a,x) << endl;
 
 	cout << "The standard normal distribution : " << gauss( x, a, b ) << endl;
-
-    Vector< complex<float> > cv(N);
-    for( int i=0; i<N; ++i )
-        cv[i] = complex<float>( sin(x[i]), cos(x[i]) );
-    cout << "Complex vector vc : " << cv << endl;
-    cout << "Absolute of vc : " << abs(cv) << endl;
-    cout << "Angle of vc : " << arg(cv) << endl;
-    cout << "Real part of vc : " << real(cv) << endl;
-    cout << "Imaginary part of vc : " << imag(cv) << endl;
 
 	return 0;
 }

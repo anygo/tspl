@@ -15,17 +15,18 @@
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
-const int Ls = 1000;
+typedef float   Type;
+const   int     Ls = 1000;
 
 
 int main()
 {
 
 	/******************************* [ signal ] ******************************/
-	Vector<float> s(Ls);
+	Vector<Type> s(Ls);
 	for(int i=0; i<Ls; i++)
 	{
 		if(i<Ls/4)
@@ -40,12 +41,12 @@ int main()
 
 	/******************************** [ DWT ] ********************************/
 	int level = 3;
-	DWT<float> discreteWT("db4");
+	DWT<Type> discreteWT("db4");
 	Timing cnt;
-	float runtime = 0.0;
+	double runtime = 0.0;
 	cout << "Taking discrete wavelet transform." << endl;
 	cnt.start();
-	Vector<float> coefs = discreteWT.dwt( s, level );
+	Vector<Type> coefs = discreteWT.dwt( s, level );
 	cnt.stop();
 	runtime = cnt.read();
 	cout << "The running time = " << runtime << " (s)" << endl << endl;
@@ -54,7 +55,7 @@ int main()
 	level = 0;
     cout << "Taking inverse discrete wavelet transform." << endl;
 	cnt.start();
-	Vector<float> x = discreteWT.idwt( coefs, level );
+	Vector<Type> x = discreteWT.idwt( coefs, level );
 	cnt.stop();
 	runtime = cnt.read();
 	cout << "The running time = " << runtime << " (s)" << endl << endl;
