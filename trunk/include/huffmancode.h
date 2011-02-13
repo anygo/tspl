@@ -1,3 +1,28 @@
+/*
+ * Copyright (c) 2008-2011 Zhang Ming (M. Zhang), zmjerry@163.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 2 or any later version.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. A copy of the GNU General Public License is available at:
+ * http://www.fsf.org/licensing/licenses
+ */
+
+
 /*****************************************************************************
  *                               huffmancode.h
  *
@@ -21,10 +46,7 @@
 #include <binaryheap.h>
 
 
-using namespace std;
-
-
-namespace itlab
+namespace splab
 {
 
     /**
@@ -67,7 +89,8 @@ namespace itlab
         HTNode() : data(Object()), cost(Weight(0)), left(NULL), right(NULL)
         { }
         HTNode( const Object &x, const Weight w,
-                HTNode<Object,Weight> *lp=NULL, HTNode<Object,Weight> *rp=NULL )
+                HTNode<Object,Weight> *lp=NULL,
+                HTNode<Object,Weight> *rp=NULL )
         {   data = x; cost = w; left = lp; right = rp;    }
 
         operator Weight() const
@@ -125,7 +148,8 @@ namespace itlab
 //        HuffmanTree & operator=( const HuffmanTree &rhs );
 
         void code( CodeObject<Object,Weight> *codeArray, int length );
-        bool decode( unsigned char bits[CODESIZE], unsigned int length, Object &decodeword );
+        bool decode( unsigned char bits[CODESIZE], unsigned int length,
+                     Object &decodeword );
         void printCode( unsigned char bits[CODESIZE], unsigned int length );
         void printCodeTable();
 
@@ -138,9 +162,11 @@ namespace itlab
         void createHuffmanTree( CodeObject<Object,Weight> *codeArray );
         void createCodeTable();
         void createCodeTableRecursive( HTNSmartPtr<Object,Weight> ht,
-                                       unsigned char *code, int pos, int &index );
+                                       unsigned char *code,
+                                       int pos, int &index );
 
-        void setBit( unsigned char *bits, unsigned int pos, unsigned int state );
+        void setBit( unsigned char *bits, unsigned int pos,
+                     unsigned int state );
         unsigned int getBit( unsigned char *codeword, unsigned int pos );
 
         void destroy( HTNode<Object,Weight> *&r );
@@ -152,7 +178,7 @@ namespace itlab
     #include <huffmancode-impl.h>
 
 }
-// namespace itlab
+// namespace splab
 
 
 #endif

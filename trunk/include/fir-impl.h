@@ -1,3 +1,28 @@
+/*
+ * Copyright (c) 2008-2011 Zhang Ming (M. Zhang), zmjerry@163.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 2 or any later version.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. A copy of the GNU General Public License is available at:
+ * http://www.fsf.org/licensing/licenses
+ */
+
+
 /*****************************************************************************
  *                               fir-impl.h
  *
@@ -73,37 +98,59 @@ void FIR::dispInfo() const
     //  gains and edge frequency
     if( filtType=="lowpass" )
     {
-        cout << "\t\t    Passband frequency (Hz) :  " << wpass1/TWOPI << endl;
-        cout << "\t\t    Passband gain      (dB) :  " << apass1 << endl;
-        cout << "\t\t    Stopband frequency (Hz) :  " << wstop1/TWOPI << endl;
-        cout << "\t\t    Stopband gain      (dB) :  " << astop1 << endl;
+        cout << "\t\t    Passband frequency (Hz) :  "
+             << wpass1/TWOPI << endl;
+        cout << "\t\t    Passband gain      (dB) :  "
+             << apass1 << endl;
+        cout << "\t\t    Stopband frequency (Hz) :  "
+             << wstop1/TWOPI << endl;
+        cout << "\t\t    Stopband gain      (dB) :  "
+             << astop1 << endl;
     }
     else if( filtType=="highpass" )
     {
-        cout << "\t\t    Stopband frequency (Hz) :  " << wstop1/TWOPI << endl;
-        cout << "\t\t    Stopband gain      (dB) :  " << astop1 << endl;
-        cout << "\t\t    Passband frequency (Hz) :  " << wpass1/TWOPI << endl;
-        cout << "\t\t    Passband gain      (dB) :  " << apass1 << endl;
+        cout << "\t\t    Stopband frequency (Hz) :  "
+             << wstop1/TWOPI << endl;
+        cout << "\t\t    Stopband gain      (dB) :  "
+             << astop1 << endl;
+        cout << "\t\t    Passband frequency (Hz) :  "
+             << wpass1/TWOPI << endl;
+        cout << "\t\t    Passband gain      (dB) :  "
+             << apass1 << endl;
     }
     else if( filtType=="bandpass" )
     {
-        cout << "\t\t    Lower stopband frequency (Hz) :  " << wstop1/TWOPI << endl;
-        cout << "\t\t    Lower stopband gain      (dB) :  " << astop1 << endl;
-        cout << "\t\t    Lower passband frequency (Hz) :  " << wpass1/TWOPI << endl;
-        cout << "\t\t    Upper passband frequency (Hz) :  " << wpass2/TWOPI << endl;
-        cout << "\t\t    Passband gain            (dB) :  " << apass1 << endl;
-        cout << "\t\t    Upper stopband frequency (Hz) :  " << wstop2/TWOPI << endl;
-        cout << "\t\t    Upper stopband gain      (dB) :  " << astop2 << endl;
+        cout << "\t\t    Lower stopband frequency (Hz) :  "
+             << wstop1/TWOPI << endl;
+        cout << "\t\t    Lower stopband gain      (dB) :  "
+             << astop1 << endl;
+        cout << "\t\t    Lower passband frequency (Hz) :  "
+             << wpass1/TWOPI << endl;
+        cout << "\t\t    Upper passband frequency (Hz) :  "
+             << wpass2/TWOPI << endl;
+        cout << "\t\t    Passband gain            (dB) :  "
+             << apass1 << endl;
+        cout << "\t\t    Upper stopband frequency (Hz) :  "
+             << wstop2/TWOPI << endl;
+        cout << "\t\t    Upper stopband gain      (dB) :  "
+             << astop2 << endl;
     }
     else
     {
-        cout << "\t\t    Lower passband frequency (Hz) :  " << wpass1/TWOPI << endl;
-        cout << "\t\t    Lower passband gain      (dB) :  " << apass1 << endl;
-        cout << "\t\t    Lower stopband frequency (Hz) :  " << wstop1/TWOPI << endl;
-        cout << "\t\t    Upper stopband frequency (Hz) :  " << wstop2/TWOPI << endl;
-        cout << "\t\t    Stopband gain            (dB) :  " << astop1 << endl;
-        cout << "\t\t    Upper passband frequency (Hz) :  " << wpass2/TWOPI << endl;
-        cout << "\t\t    Upper passband gain      (dB) :  " << apass2 << endl;
+        cout << "\t\t    Lower passband frequency (Hz) :  "
+             << wpass1/TWOPI << endl;
+        cout << "\t\t    Lower passband gain      (dB) :  "
+             << apass1 << endl;
+        cout << "\t\t    Lower stopband frequency (Hz) :  "
+             << wstop1/TWOPI << endl;
+        cout << "\t\t    Upper stopband frequency (Hz) :  "
+             << wstop2/TWOPI << endl;
+        cout << "\t\t    Stopband gain            (dB) :  "
+             << astop1 << endl;
+        cout << "\t\t    Upper passband frequency (Hz) :  "
+             << wpass2/TWOPI << endl;
+        cout << "\t\t    Upper passband gain      (dB) :  "
+             << apass2 << endl;
     }
 
     // display coefficients
@@ -123,10 +170,11 @@ void FIR::dispInfo() const
             cout << setw(16) << coefs[j+k] << " " ;
     }
 
-    cout << endl << endl << endl << "\t ==================== Edge Frequency Response";
+    cout << endl << endl << endl
+         << "\t ==================== Edge Frequency Response";
     cout << " ====================" << endl;
     cout << setiosflags(ios::fixed);
-    if( edgeGain.size() == 2 )
+	if( edgeGain.size() == 2 )
     {
         cout << "\t     Mag(fp) = " << edgeGain[0] << "(dB)";
         cout << "       Mag(fs) = " << edgeGain[1] << "(dB)" << endl;
@@ -277,9 +325,9 @@ void FIR::calcCoef()
 
     // Get window function.
     if( windType=="Kaiser" || windType=="Gauss" )
-        wind = window( windType, order, alpha );
+        wind = window( windType, order, alpha, 1.0 );
     else
-        wind = window( windType, order );
+        wind = window( windType, order, 1.0 );
 
     //  Multiply window and ideal coefficients.
     coefs *= wind;

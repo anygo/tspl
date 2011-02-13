@@ -1,3 +1,28 @@
+/*
+ * Copyright (c) 2008-2011 Zhang Ming (M. Zhang), zmjerry@163.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 2 or any later version.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. A copy of the GNU General Public License is available at:
+ * http://www.fsf.org/licensing/licenses
+ */
+
+
 /*****************************************************************************
  *                           statistics-impl.h
  *
@@ -131,7 +156,7 @@ Type kurt( const Vector<Type> &v )
  * Fast algorithm of PDF(probability density function) estimation
  * of a random sequence. The binning method and third-order cardinal
  * spline kernel function are used for reducing the computation
- * amount. Lambda is the coeffcient of kernel bandwidth "kb", the
+ * amount. Lambda is the coefficient of kernel bandwidth "kb", the
  * optimal "kb"( 2.11/Lx^0.2 * std(xn) ) is chosen when "lambda=1.0".
  * If you want to compute more point's probability, you can use a
  * smaller "lambda", such as 0.5, in this case you'd better make a
@@ -156,7 +181,7 @@ Vector<Type> pdf( Vector<Type> &xn, const Type lambda )
     for( i=0; i<Lx; ++i )
     {
         tmpDbl = xn[i] / kb;
-        pos[i] = floor(tmpDbl);
+        pos[i] = int(tmpDbl);
         r[i] = tmpDbl - pos[i];
     }
 

@@ -1,9 +1,34 @@
+/*
+ * Copyright (c) 2008-2011 Zhang Ming (M. Zhang), zmjerry@163.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 2 or any later version.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. A copy of the GNU General Public License is available at:
+ * http://www.fsf.org/licensing/licenses
+ */
+
+
 /*****************************************************************************
  *                               vector-impl.h
  *
  * Implementation for Vector class.
  *
- * Zhang Ming, 2010-01 (revised 2010-08), Xi'an Jiaotong University.
+ * Zhang Ming, 2010-01 (revised 2010-12), Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -546,6 +571,45 @@ inline Vector<Type> operator/( const Vector<Type> &v1, const Vector<Type> &v2 )
 
 
 /**
+ * Inner product for vectors.
+ */
+template <typename Type>
+Type dotProd( const Vector<Type> &v1, const Vector<Type> &v2 )
+{
+	assert( v1.dim() == v2.dim() );
+
+    Type sum = 0;
+    typename Vector<Type>::const_iterator itr1 = v1.begin();
+    typename Vector<Type>::const_iterator itr2 = v2.begin();
+
+    while( itr1 != v1.end() )
+		sum += (*itr1++) * (*itr2++);
+
+	return sum;
+}
+
+
+/**
+ * Inner product for vectors.
+ */
+template <typename Type>
+complex<Type> dotProd( const Vector<complex<Type> > &v1,
+                       const Vector<complex<Type> > &v2 )
+{
+	assert( v1.dim() == v2.dim() );
+
+    complex<Type> sum = 0;
+    typename Vector<complex<Type> >::const_iterator itr1 = v1.begin();
+    typename Vector<complex<Type> >::const_iterator itr2 = v2.begin();
+
+    while( itr1 != v1.end() )
+		sum += (*itr1++) * conj(*itr2++);
+
+	return sum;
+}
+
+
+/**
  * Vector's sum.
  */
 template <typename Type>
@@ -611,6 +675,22 @@ Type norm( const Vector<Type> &v )
 
 
 /**
+ * Vector's norm in Euclidean space.
+ */
+template <typename Type>
+Type norm( const Vector<complex<Type> > &v )
+{
+	Type sum = 0;
+	typename Vector<complex<Type> >::const_iterator itr = v.begin();
+
+	while( itr != v.end() )
+	    sum += norm(*itr++);
+
+	return Type(sqrt(1.0*sum));
+}
+
+
+/**
  * return vector's reversion
  */
 template <typename Type>
@@ -625,19 +705,130 @@ void swap( Vector<Type> &lhs, Vector<Type> &rhs )
 
 
 /**
- * Inner product for vectors.
+ * Generates a vector of n points linearly spaced between and
+ * including a and b.
  */
 template <typename Type>
-Type dotProd( const Vector<Type> &v1, const Vector<Type> &v2 )
+Vector<Type> linspace( Type a, Type b, int n )
 {
-	assert( v1.dim() == v2.dim() );
+    if( n < 1 )
+        return Vector<Type>();
+    else if( n == 1 )
+        return Vector<Type>( 1, a );
+    else
+    {
+        Type dx = (b-a) / (n-1);
 
-    Type sum = 0;
-    typename Vector<Type>::const_iterator itr1 = v1.begin();
-    typename Vector<Type>::const_iterator itr2 = v2.begin();
+        Vector<Type> tmp(n);
+        for( int i=0; i<n; ++i )
+            tmp[i] = a + i*dx;
 
-    while( itr1 != v1.end() )
-		sum += (*itr1++) * (*itr2++);
+        return tmp;
+    }
+}
 
-	return sum;
+
+/**
+ * Get magnitude of a complex vector.
+ */
+template <typename Type>
+Vector<Type> abs( const Vector< complex<Type> > &v )
+{
+    Vector<Type> tmp( v.dim() );
+    typename Vector<Type>::iterator itrL = tmp.begin();
+    typename Vector< complex<Type> >::const_iterator itrR = v.begin();
+
+    while( itrL != tmp.end() )
+        *itrL++ = abs(*itrR++);
+
+    return tmp;
+}
+
+
+/**
+ * Get angle of a complex vector.
+ */
+template <typename Type>
+Vector<Type> arg( const Vector< complex<Type> > &v )
+{
+    Vector<Type> tmp( v.dim() );
+    typename Vector<Type>::iterator itrL = tmp.begin();
+    typename Vector< complex<Type> >::const_iterator itrR = v.begin();
+
+    while( itrL != tmp.end() )
+        *itrL++ = arg(*itrR++);
+
+    return tmp;
+}
+
+
+/**
+ * Get real part of a complex vector.
+ */
+template <typename Type>
+Vector<Type> real( const Vector< complex<Type> > &v )
+{
+    Vector<Type> tmp( v.dim() );
+    typename Vector<Type>::iterator itrL = tmp.begin();
+    typename Vector< complex<Type> >::const_iterator itrR = v.begin();
+
+    while( itrL != tmp.end() )
+        *itrL++ = (*itrR++).real();
+
+    return tmp;
+}
+
+
+/**
+ * Get imaginary part of a complex vector.
+ */
+template <typename Type>
+Vector<Type> imag( const Vector< complex<Type> > &v )
+{
+    Vector<Type> tmp( v.dim() );
+    typename Vector<Type>::iterator itrL = tmp.begin();
+    typename Vector< complex<Type> >::const_iterator itrR = v.begin();
+
+    while( itrL != tmp.end() )
+        *itrL++ = (*itrR++).imag();
+
+    return tmp;
+}
+
+
+/**
+ * Convert real vector to complex vector.
+ */
+template <typename Type>
+Vector<complex<Type> > complexVector( const Vector<Type> &rv )
+{
+	int N = rv.dim();
+
+    Vector<complex<Type> > cv( N );
+    typename Vector<complex<Type> >::iterator itrL = cv.begin();
+    typename Vector<Type>::const_iterator itrR = rv.begin();
+
+    while( itrR != rv.end() )
+        *itrL++ = *itrR++;
+
+    return cv;
+}
+
+template <typename Type>
+Vector<complex<Type> > complexVector( const Vector<Type> &vR,
+                                      const Vector<Type> &vI )
+{
+	int N = vR.dim();
+
+	assert( N == vI.dim() );
+
+    Vector<complex<Type> > cv( N );
+    typename Vector<complex<Type> >::iterator itrC = cv.begin();
+    typename Vector<Type>::const_iterator itrR = vR.begin(),
+                                          itrI = vI.begin();
+
+    while( itrC != cv.end() )
+        *itrC++ = complex<Type>( *itrR++, *itrI++ );
+
+    return cv;
 }

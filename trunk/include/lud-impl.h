@@ -1,22 +1,47 @@
+/*
+ * Copyright (c) 2008-2011 Zhang Ming (M. Zhang), zmjerry@163.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 2 or any later version.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. A copy of the GNU General Public License is available at:
+ * http://www.fsf.org/licensing/licenses
+ */
+
+
 /*****************************************************************************
  *                               lud-impl.h
  *
  * Implementation for LUD class.
  *
- * Zhang Ming, 2010-01, Xi'an Jiaotong University.
+ * Zhang Ming, 2010-01 (revised 2010-12), Xi'an Jiaotong University.
  *****************************************************************************/
 
 
 /**
  * constructor and destructor
  */
-template<typename Real>
-LUD<Real>::LUD()
+template<typename Type>
+LUD<Type>::LUD()
 {
 }
 
-template<typename Real>
-LUD<Real>::~LUD()
+template<typename Type>
+LUD<Type>::~LUD()
 {
 }
 
@@ -24,27 +49,27 @@ LUD<Real>::~LUD()
 /**
  * permute copy
  */
-template <typename Real>
-Vector<Real> LUD<Real>::permuteCopy( const Vector<Real> &A,
+template <typename Type>
+Vector<Type> LUD<Type>::permuteCopy( const Vector<Type> &A,
                                      const Vector<int> &piv )
 {
     int pivLength = piv.dim();
     if( pivLength != A.dim() )
-        return Vector<Real>();
+        return Vector<Type>();
 
-    Vector<Real> x(pivLength);
+    Vector<Type> x(pivLength);
     for( int i=0; i<pivLength; ++i )
         x[i] = A[piv[i]];
 
     return x;
 }
 
-template <typename Real>
-Matrix<Real> LUD<Real>::permuteCopy( const Matrix<Real> &A,
+template <typename Type>
+Matrix<Type> LUD<Type>::permuteCopy( const Matrix<Type> &A,
                                      const Vector<int> &piv, int j0, int j1 )
 {
     int pivLength = piv.dim();
-    Matrix<Real> X( pivLength, j1-j0+1 );
+    Matrix<Type> X( pivLength, j1-j0+1 );
 
     for( int i=0; i<pivLength; ++i )
         for( int j=j0; j<=j1; ++j )
@@ -57,8 +82,8 @@ Matrix<Real> LUD<Real>::permuteCopy( const Matrix<Real> &A,
 /**
  * Return pivot permutation vector
  */
-template<typename Real>
-inline Vector<int> LUD<Real>::getPivot() const
+template<typename Type>
+inline Vector<int> LUD<Type>::getPivot() const
 {
     return piv;
 }
@@ -67,8 +92,8 @@ inline Vector<int> LUD<Real>::getPivot() const
 /**
  * LU Decomposition
  */
-template <typename Real>
-void LUD<Real>::dec(const Matrix<Real> &A)
+template <typename Type>
+void LUD<Type>::dec(const Matrix<Type> &A)
 {
     m = A.rows();
     n = A.cols();
@@ -80,8 +105,8 @@ void LUD<Real>::dec(const Matrix<Real> &A)
         piv[i] = i;
 
     pivsign = 1;
-    Real *LUrowi = 0;
-    Vector<Real> LUcolj(m);
+    Type *LUrowi = 0;
+    Vector<Type> LUcolj(m);
 
     // outer loop
     for( int j=0; j<n; ++j )
@@ -97,7 +122,7 @@ void LUD<Real>::dec(const Matrix<Real> &A)
 
             // Most of the time is spent in the following dot product.
             int kmax = (i < j)? i : j;
-            Real s = 0;
+            Type s = 0;
 
             for( int k=0; k<kmax; ++k )
                 s += LUrowi[k]*LUcolj[k];
@@ -117,14 +142,12 @@ void LUD<Real>::dec(const Matrix<Real> &A)
             for( k=0; k<n; ++k )
                 swap( LU[p][k], LU[j][k] );
 
-            k = piv[p];
-            piv[p] = piv[j];
-            piv[j] = k;
+            swap( piv[p], piv[j] );
             pivsign = -pivsign;
         }
 
         // compute multipliers
-        if( (j < m) && ( LU[j][j] != 0 ) )
+        if( (j < m) && ( abs(LU[j][j]) != 0 ) )
             for( int i=j+1; i<m; ++i )
                 LU[i][j] /= LU[j][j];
     }
@@ -132,47 +155,51 @@ void LUD<Real>::dec(const Matrix<Real> &A)
 
 
 /**
- * Return lower and upper triangular factor L and U.
+ * Return lower triangular matrix L.
  */
-template <typename Real>
-void LUD<Real>::getL( Matrix<Real> &L )
+template <typename Type>
+Matrix<Type> LUD<Type>::getL()
 {
-    L.resize( m, n );
+    int p = min( m, n );
+    Matrix<Type> tmp( m, p );
 
     for( int i=0; i<m; ++i )
-        for( int j=0; j<n; ++j )
-            if( i > j )
-                L[i][j] = LU[i][j];
-            else if ( i == j )
-                L[i][j] = 1;
-            else
-                L[i][j] = 0;
+        for( int j=0; j<i && j<n; ++j )
+            tmp[i][j] = LU[i][j];
+   for( int i=0; i<p; ++i )
+        tmp[i][i] = 1;
+
+    return tmp;
 }
 
-template <typename Real>
-void LUD<Real>::getU( Matrix<Real> &U )
-{
-    U.resize( n, n );
 
-    for( int i=0; i<n; ++i )
-        for( int j=0; j<n; ++j )
-            if( i <= j )
-                U[i][j] = LU[i][j];
-            else
-                U[i][j] = 0;
+/**
+ * Return upper triangular matrix U.
+ */
+template <typename Type>
+Matrix<Type>LUD<Type>::getU()
+{
+    int p = min( m, n );
+    Matrix<Type> tmp( p, n );
+
+    for( int i=0; i<m; ++i )
+        for( int j=i; j<n; ++j )
+            tmp[i][j] = LU[i][j];
+
+    return tmp;
 }
 
 
 /**
  * Compute determinant using LU factors.
  */
-template <typename Real>
-Real LUD<Real>::det()
+template <typename Type>
+Type LUD<Type>::det()
 {
     if( m != n )
         return 0;
 
-    Real d = Real(pivsign);
+    Type d = Type(pivsign);
     for( int j=0; j<n; ++j )
         d *= LU[j][j];
 
@@ -183,11 +210,11 @@ Real LUD<Real>::det()
 /**
  * true if upper triangular factor U is nonsingular, 0 otherwise.
  */
-template <typename Real>
-inline bool LUD<Real>::isNonsingular()
+template <typename Type>
+inline bool LUD<Type>::isNonsingular()
 {
     for( int j=0; j<n; ++j )
-        if( LU[j][j] == 0 )
+        if( abs(LU[j][j]) == 0 )
             return false;
 
     return true;
@@ -198,17 +225,17 @@ inline bool LUD<Real>::isNonsingular()
  * Solve A*x = b, where x and b are vectors of length equal
  * to the number of rows in A.
  */
-template <typename Real>
-Vector<Real> LUD<Real>::solve( const Vector<Real> &b )
+template <typename Type>
+Vector<Type> LUD<Type>::solve( const Vector<Type> &b )
 {
     // dimensions: A is mxn, X is nxk, B is mxk
     if( b.dim() != m )
-        return Vector<Real>();
+        return Vector<Type>();
 
     if( !isNonsingular() )
-        return Vector<Real>();
+        return Vector<Type>();
 
-    Vector<Real> x = permuteCopy( b, piv );
+    Vector<Type> x = permuteCopy( b, piv );
 
     // solve L*Y = B(piv)
     for( int k=0; k<n; ++k )
@@ -230,19 +257,19 @@ Vector<Real> LUD<Real>::solve( const Vector<Real> &b )
 /**
  * Solve A*X = B
  */
-template <typename Real>
-Matrix<Real> LUD<Real>::solve( const Matrix<Real> &B )
+template <typename Type>
+Matrix<Type> LUD<Type>::solve( const Matrix<Type> &B )
 {
     // dimensions: A is mxn, X is nxk, B is mxk
     if( B.rows() != m )
-        return Matrix<Real>(0,0);
+        return Matrix<Type>(0,0);
 
     if( !isNonsingular() )
-        return Matrix<Real>(0,0);
+        return Matrix<Type>(0,0);
 
     // copy right hand side with pivoting
     int nx = B.cols();
-    Matrix<Real> X = permuteCopy( B, piv, 0, nx-1 );
+    Matrix<Type> X = permuteCopy( B, piv, 0, nx-1 );
 
     // solve L*Y = B(piv,:)
     for( int k=0; k<n; ++k )

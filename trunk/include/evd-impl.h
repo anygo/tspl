@@ -1,9 +1,34 @@
+/*
+ * Copyright (c) 2008-2011 Zhang Ming (M. Zhang), zmjerry@163.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 2 or any later version.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. A copy of the GNU General Public License is available at:
+ * http://www.fsf.org/licensing/licenses
+ */
+
+
 /*****************************************************************************
  *                               evd-impl.h
  *
  * Implementation for EVD class.
  *
- * Zhang Ming, 2010-01, Xi'an Jiaotong University.
+ * Zhang Ming, 2010-01 (revised 2010-12), Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -11,7 +36,7 @@
  * constructor and destructor
  */
 template<typename Real>
-EVD<Real>::EVD() : isSymmetric(true)
+EVD<Real>::EVD() : symmetric(true)
 {
 }
 
@@ -19,6 +44,197 @@ template<typename Real>
 EVD<Real>::~EVD()
 {
 }
+
+
+/**
+ * Check for symmetry, then construct the eigenvalue decomposition
+ */
+template <typename Real>
+void EVD<Real>::dec( const Matrix<Real> &A )
+{
+    n = A.cols();
+
+    assert( A.rows() == n );
+
+    V = Matrix<Real>(n,n);
+    d = Vector<Real>(n);
+    e = Vector<Real>(n);
+
+    symmetric = true;
+    for( int j=0; (j<n) && symmetric; ++j )
+        for( int i=0; (i<n) && symmetric; ++i )
+            symmetric = ( A[i][j] == A[j][i] );
+
+    if(symmetric)
+    {
+        for( int i=0; i<n; ++i )
+            for( int j=0; j<n; ++j )
+                V[i][j] = A[i][j];
+
+        // tridiagonalize.
+        tred2();
+
+        // diagonalize.
+        tql2();
+    }
+    else
+    {
+        H = Matrix<Real>(n,n);
+        ort = Vector<Real>(n);
+
+        for( int j=0; j<n; ++j )
+            for( int i=0; i<n; ++i )
+                H[i][j] = A[i][j];
+
+        // reduce to Hessenberg form
+        others();
+
+        // reduce Hessenberg to real Schur form
+        hqr2();
+    }
+
+//    normalized();
+}
+
+
+/**
+ * If the matrix is symmetric, then return true.
+ */
+template <typename Real>
+bool EVD<Real>::isSymmetric() const
+{
+    return symmetric;
+}
+
+
+/**
+ * If the eigenvalues are complex, then return true.
+ */
+template <typename Real>
+bool EVD<Real>::isComplex( Real tol )
+{
+    if( symmetric )
+        return false;
+
+    Real crt = 0;
+    for( int i=0; i<n; ++i )
+        crt += abs(e[i]);
+
+    if( crt > tol )
+        return true;
+    else
+        return false;
+}
+
+
+/**
+ * Return the REAL eigenvector matrix
+ */
+template <typename Real>
+inline Matrix<Real> EVD<Real>::getV() const
+{
+    return V;
+}
+
+
+/**
+ * Return the COMPLEX eigenvector matrix
+ */
+template <typename Real>
+Matrix<complex<Real> > EVD<Real>::getCV()
+{
+    Matrix<complex<Real> > cV(n,n);
+
+    int col = 0;
+    while( col < n-1 )
+    {
+        // eigenvalues d[col] and d[col+1] are complex
+        if( d[col] == d[col+1] )
+        {
+            for( int i=0; i<n; ++i )
+            {
+                cV[i][col]   = complex<Real>( V[i][col], V[i][col+1] );
+                cV[i][col+1] = conj(cV[i][col]);
+            }
+            col += 2;
+        }
+        // eigenvalue d[col] is real
+        else
+        {
+            for( int i=0; i<n; ++i )
+                cV[i][col] = V[i][col];
+            col += 1;
+        }
+    }
+
+    // eigenvalue d[n-1] is real
+    if( col == n-1 )
+    {
+        for( int i=0; i<n; ++i )
+            cV[i][col] = V[i][col];
+        col += 1;
+    }
+
+    return cV;
+}
+
+
+/**
+ * Return the real eigenvalues
+ */
+template <typename Real>
+inline Vector<Real> EVD<Real>::getD() const
+{
+    return d;
+}
+
+
+/**
+ * Return the complex eigenvalues
+ */
+template <typename Real>
+inline Vector<complex<Real> > EVD<Real>::getCD()
+{
+    return complexVector( d, e );
+}
+
+
+///**
+// * Computes the block diagonal eigenvalue matrix.
+// * If the original matrix A is not symmetric, then the eigenvalue
+// * matrix D is block diagonal with the real eigenvalues in 1-by-1
+// * blocks and any complex eigenvalues, a+i*b, in 2-by-2 blocks.
+// */
+//template <typename Real>
+//Matrix<Real> EVD<Real>::getDM()
+//{
+//    Matrix<Real> tmp(n,n);
+//    for( int i=0; i<n; ++i )
+//    {
+//        tmp[i][i] = d[i];
+//
+//        if( e[i] > 0 )
+//            tmp[i][i+1] = e[i];
+//        else if( e[i] < 0 )
+//            tmp[i][i-1] = e[i];
+//    }
+//
+//    return tmp;
+//}
+//
+//
+///**
+// * Return the COMPLEX diagonal eigenvalue matrix.
+// */
+//template <typename Real>
+//Matrix<complex<Real> > EVD<Real>::getCDM()
+//{
+//    Matrix<complex<Real> > cD(n,n);
+//    for( int i=0; i<n; ++i )
+//        cD[i][i] = complex<Real>( d[i], e[i] );
+//
+//    return cD;
+//}
 
 
 /**
@@ -841,53 +1057,6 @@ void EVD<Real>::hqr2()
 
 
 /**
- * Check for symmetry, then construct the eigenvalue decomposition
- */
-template <typename Real>
-void EVD<Real>::dec( const Matrix<Real> &A )
-{
-    n = A.cols();
-    V = Matrix<Real>(n,n);
-    d = Vector<Real>(n);
-    e = Vector<Real>(n);
-
-    for( int j=0; (j<n) && isSymmetric; ++j )
-        for( int i=0; (i<n) && isSymmetric; ++i )
-            isSymmetric = ( A[i][j] == A[j][i] );
-
-    if(isSymmetric)
-    {
-        for( int i=0; i<n; ++i )
-            for( int j=0; j<n; ++j )
-                V[i][j] = A[i][j];
-
-        // tridiagonalize.
-        tred2();
-
-        // diagonalize.
-        tql2();
-    }
-    else
-    {
-        H = Matrix<Real>(n,n);
-        ort = Vector<Real>(n);
-
-        for( int j=0; j<n; ++j )
-            for( int i=0; i<n; ++i )
-                H[i][j] = A[i][j];
-
-        // reduce to Hessenberg form
-        others();
-
-        // reduce Hessenberg to real Schur form
-        hqr2();
-    }
-
-    normalized();
-}
-
-
-/**
  * Making normalization and sorting.
  */
 template <typename Real>
@@ -904,60 +1073,4 @@ void EVD<Real>::normalized()
         for( int i=0; i<n; ++i )
             V[i][j] /= norm2;
     }
-}
-
-
-/**
- * Return the eigenvector matrix
- */
-template <typename Real>
-inline Matrix<Real> EVD<Real>::getV() const
-{
-    return V;
-}
-
-
-/**
- * Return the real parts of the eigenvalues
- */
-template <typename Real>
-inline Vector<Real> EVD<Real>::getRealEigenvalues() const
-{
-    return d;
-}
-
-
-/**
- * Return the imaginary parts of the eigenvalues
- */
-template <typename Real>
-inline Vector<Real> EVD<Real>::getImagEigenvalues() const
-{
-    return e;
-}
-
-
-/**
- * Computes the block diagonal eigenvalue matrix.
- * If the original matrix A is not symmetric, then the eigenvalue
- * matrix D is block diagonal with the real eigenvalues in 1-by-1
- * blocks and any complex eigenvalues, a+i*b, in 2-by-2 blocks.
- */
-template <typename Real>
-Matrix<Real> EVD<Real>::getD() const
-{
-    Matrix<Real> tmp(n,n);
-    for( int i=0; i<n; ++i )
-    {
-        for( int j=0; j<n; ++j )
-            tmp[i][j] = 0;
-        tmp[i][i] = d[i];
-
-        if( e[i] > 0 )
-            tmp[i][i+1] = e[i];
-        else if( e[i] < 0 )
-            tmp[i][i-1] = e[i];
-    }
-
-    return tmp;
 }

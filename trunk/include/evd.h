@@ -1,12 +1,39 @@
+/*
+ * Copyright (c) 2008-2011 Zhang Ming (M. Zhang), zmjerry@163.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 2 or any later version.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. A copy of the GNU General Public License is available at:
+ * http://www.fsf.org/licensing/licenses
+ */
+
+
 /*****************************************************************************
  *                                    evd.h
  *
  * Class template of eigenvalues and eigenvectors decomposition.
  *
- * If A is symmetric, then A=V*D*V', where the eigenvalue matrix D is
- * diagonal and the eigenvector matrix V is orthogonal. That is, the
- * diagonal values of D are the eigenvalues and the columns of V represent
- * the eigenvectors in the sense that A*V=V*D.
+ * For a real matrix A, we have A*V = V*D, where the eigenvalue matrix D is
+ * diagonal and the eigenvector matrix V is linear independence. That is the
+ * kth diagonal value of D is the eigenvalue and the kth column of V
+ * represents the corresponding eigenvector of D[k][k]. If A is symmetric,
+ * then V is a orthogonal matrix, which means A = V*D*V', and eigenvalues
+ * are all real numbers.
  *
  * If A is not symmetric, then the eigenvalue matrix D is block diagonal
  * with the real eigenvalues in 1-by-1 blocks and any complex eigenvalues,
@@ -35,9 +62,9 @@
  * The matrix V may be badly conditioned, or even singular, so the validity
  * of the equation A=V*D*inverse(V) depends upon the condition number of V.
  *
- * Adapted form Template Numerical Toolkit.
+ * Adapted from Template Numerical Toolkit.
  *
- * Zhang Ming, 2010-01, Xi'an Jiaotong University.
+ * Zhang Ming, 2010-01 (revised 2010-12), Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -48,7 +75,7 @@
 #include <matrix.h>
 
 
-namespace itlab
+namespace splab
 {
 
 	template <typename Real>
@@ -60,16 +87,27 @@ namespace itlab
         EVD();
 		~EVD();
 
+        // decomposition
 		void dec( const Matrix<Real> &A );
+
+		// the eigenvalues are real or complex
+		bool isSymmetric() const;
+		bool isComplex( Real tol=Real(EPS) );
+
+        // get eigenvectors
 		Matrix<Real> getV() const;
-		Matrix<Real> getD() const;
-		Vector<Real> getRealEigenvalues() const;
-		Vector<Real> getImagEigenvalues() const;
+		Matrix<complex<Real> > getCV();
+
+        // get eigenvalues
+        Vector<Real> getD() const;
+        Vector<complex<Real> > getCD();
+//        Matrix<Real> getDM();
+//        Matrix<complex<Real> > getCDM();
 
     private:
 
 		int     n;
-		bool    isSymmetric;
+		bool    symmetric;
         Real    cdivr,
                 cdivi;
 
@@ -96,7 +134,7 @@ namespace itlab
     #include <evd-impl.h>
 
 }
-// namespace itlab
+// namespace splab
 
 
 #endif
