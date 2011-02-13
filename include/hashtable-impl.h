@@ -1,3 +1,28 @@
+/*
+ * Copyright (c) 2008-2011 Zhang Ming (M. Zhang), zmjerry@163.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 2 or any later version.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. A copy of the GNU General Public License is available at:
+ * http://www.fsf.org/licensing/licenses
+ */
+
+
 /*****************************************************************************
  *                               hashtable-impl.h
  *
@@ -45,7 +70,8 @@ HashTable<Object, Key>::~HashTable()
  * Overload copy assignment operation.
  */
 template <typename Object, typename Key>
-HashTable<Object, Key>& HashTable<Object, Key>::operator=( const HashTable<Object, Key> &rhs )
+HashTable<Object, Key>&
+HashTable<Object, Key>::operator=( const HashTable<Object, Key> &rhs )
 {
     tableSize = rhs.tableSize;
     currentSize = rhs.currentSize;
@@ -208,7 +234,7 @@ int HashTable<Object, Key>::myhash( const Key k ) const
 /**
  * If "n" is a prime number, return true.
  */
-bool isPrime( int n )
+static bool isPrime( int n )
 {
     if( n == 2 || n == 3 )
         return true;
@@ -227,7 +253,7 @@ bool isPrime( int n )
 /**
  * Finding the nest prime number greater than "n".
  */
-int nextPrime( int n )
+static int nextPrime( int n )
 {
     if( n%2 == 0 )
         n++;

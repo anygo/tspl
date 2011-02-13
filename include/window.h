@@ -1,9 +1,32 @@
+/*
+ * Copyright (c) 2008-2011 Zhang Ming (M. Zhang), zmjerry@163.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 2 or any later version.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. A copy of the GNU General Public License is available at:
+ * http://www.fsf.org/licensing/licenses
+ */
+
+
 /*****************************************************************************
  *                                 window.h
  *
- * Often used windows in signal processing, particularly in FIR design.
- *
- * There are seven windows in this file:
+ * This file includes seven usually used windows in signal processing:
  *      Rectangle        Bartlett        Hanning     Hamming
  *      Blackman         Kaiser          Gauss
  * All of them are same to those in "Matlab".
@@ -19,27 +42,28 @@
 #include <vector.h>
 
 
-namespace itlab
+namespace splab
 {
 
-    Vector<double> window( const string&, int );
-	Vector<double> window( const string&, int, double );
+    template<typename Type> Vector<Type> window( const string&, int, Type );
+	template<typename Type> Vector<Type> window( const string&, int,
+                                                 Type, Type );
 
-    Vector<double> rectangle( int );
-    Vector<double> bartlett( int );
-    Vector<double> hanning( int );
-    Vector<double> hamming( int );
-    Vector<double> blackman( int );
-    Vector<double> kaiser( int, double );
-    Vector<double> gauss( int, double alpha = 2.5 );
+    template<typename Type> Vector<Type> rectangle( int, Type );
+    template<typename Type> Vector<Type> bartlett( int, Type );
+    template<typename Type> Vector<Type> hanning( int, Type );
+    template<typename Type> Vector<Type> hamming( int, Type );
+    template<typename Type> Vector<Type> blackman( int, Type );
+    template<typename Type> Vector<Type> kaiser( int, Type, Type );
+    template<typename Type> Vector<Type> gauss( int, Type, Type );
 
-	double I0( double alpha );
+	template<typename Type> Type I0( Type alpha );
 
 
 	#include <window-impl.h>
 
 }
-// namespace itlab
+// namespace splab
 
 
 #endif

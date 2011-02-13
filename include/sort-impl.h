@@ -1,3 +1,28 @@
+/*
+ * Copyright (c) 2008-2011 Zhang Ming (M. Zhang), zmjerry@163.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 2 or any later version.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. A copy of the GNU General Public License is available at:
+ * http://www.fsf.org/licensing/licenses
+ */
+
+
 /*****************************************************************************
  *                                  sort-impl.h
  *
@@ -14,7 +39,7 @@
  * "right"  ---->   the right-most index of the subarray.
  */
  template <typename Type>
- void bubbleSort( vector<Type> &a, int left, int right )
+ void bubbleSort( Vector<Type> &a, int left, int right )
  {
      bool cond;
      for( int i=left; i<right; ++i )
@@ -40,7 +65,7 @@
  * "right"  ---->   the right-most index of the subarray.
  */
  template <typename Type>
- void selectSort( vector<Type> &a, int left, int right )
+ void selectSort( Vector<Type> &a, int left, int right )
  {
      Type minPos;
      for( int i=left; i<right; ++i )
@@ -63,7 +88,7 @@
  * "right"  ---->   the right-most index of the subarray.
  */
 template <typename Type>
-void insertSort( vector<Type> &a, int left, int right )
+void insertSort( Vector<Type> &a, int left, int right )
 {
     for( int p=left+1; p<=right; p++ )
     {
@@ -85,7 +110,7 @@ void insertSort( vector<Type> &a, int left, int right )
  * "right"  ---->   the right-most index of the subarray.
  */
 template <typename Type>
-void quickSort( vector<Type> &a, int left, int right )
+void quickSort( Vector<Type> &a, int left, int right )
 {
     if( left+20 <= right )
     {
@@ -125,7 +150,7 @@ void quickSort( vector<Type> &a, int left, int right )
  * "right"  ---->   the right-most index of the subarray.
  */
 template <typename Type>
-void mergSort( vector<Type> &a, int left, int right )
+void mergSort( Vector<Type> &a, int left, int right )
 {
     int left1, right1, left2, right2,
         n = right - left + 1,
@@ -161,10 +186,10 @@ void mergSort( vector<Type> &a, int left, int right )
  * "right"  ---->   the right-most index of the subarray.
  */
 template <typename Type>
-void heapSort( vector<Type> &a, int left, int right )
+void heapSort( Vector<Type> &a, int left, int right )
 {
     int n = right-left+1;
-    vector<Type> tmp( n );
+    Vector<Type> tmp( n );
     for( int i=0; i<n; ++i )
         tmp[i] = a[left+i];
 
@@ -186,7 +211,7 @@ void heapSort( vector<Type> &a, int left, int right )
  * Order these and hide the pivot.
  */
 template <typename Type>
-const Type& median3( vector<Type> &a, int left, int right )
+const Type& median3( Vector<Type> &a, int left, int right )
 {
     int center = (left+right) / 2;
 
@@ -211,7 +236,7 @@ const Type& median3( vector<Type> &a, int left, int right )
  * The second subsqeuence is a[left2] ... a[right2].
  */
 template <typename Type>
-void merg( vector<Type> &a, int left1, int right1, int left2, int right2 )
+void merg( Vector<Type> &a, int left1, int right1, int left2, int right2 )
 {
     int k = 0,
         i = left1,
@@ -247,7 +272,7 @@ void merg( vector<Type> &a, int left1, int right1, int left2, int right2 )
  * "n"  ---->  the logical size of the binary heap.
  */
 template <typename Type>
-void filterDown( vector<Type> &a, int i, int n )
+void filterDown( Vector<Type> &a, int i, int n )
 {
     int child;
     Type tmp;

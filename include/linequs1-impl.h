@@ -1,10 +1,62 @@
+/*
+ * Copyright (c) 2008-2011 Zhang Ming (M. Zhang), zmjerry@163.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 2 or any later version.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. A copy of the GNU General Public License is available at:
+ * http://www.fsf.org/licensing/licenses
+ */
+
+
 /*****************************************************************************
  *                            linequs1-impl.h
  *
  * Implementation for deterministic linear equations.
  *
- * Zhang Ming, 2010-07, Xi'an Jiaotong University.
+ * Zhang Ming, 2010-07 (revised 2010-12), Xi'an Jiaotong University.
  *****************************************************************************/
+
+
+/**
+ * Linear equations solution by Gauss-Jordan elimination, Ax=B.
+ * A  --->  The n-by-n coefficient matrix(Full Rank);
+ * b  --->  The n-by-1 right-hand side vector;
+ * x  --->  The n-by-1 solution vector.
+ */
+template <typename Type>
+Vector<Type> gaussSolver( const Matrix<Type> &A, const Vector<Type> &b )
+{
+    assert( A.rows() == b.size() );
+
+    int rows = b.size();
+    Vector<Type> x( rows );
+    Matrix<Type> C(A);
+    Matrix<Type> B( rows, 1 );
+    for( int i=0; i<rows; ++i )
+        B[i][0] = b[i];
+
+    gaussSolver( C, B );
+
+    for( int i=0; i<rows; ++i )
+        x[i] = B[i][0];
+
+    return x;
+}
 
 
 /**
@@ -15,15 +67,15 @@
  * B is replaced by the corresponding set of solution vectors.
  * Adapted from Numerical Recipes.
  */
-template <typename Real>
-void gaussSolver( Matrix<Real> &A, Matrix<Real> &B )
+template <typename Type>
+void gaussSolver( Matrix<Type> &A, Matrix<Type> &B )
 {
     assert( A.rows() == B.rows() );
 
     int i, j, k, l, ll, icol, irow,
         n=A.rows(),
         m=B.cols();
-    Real big, dum, pivinv;
+    Type big, dum, pivinv;
 
     Vector<int> indxc(n), indxr(n), ipiv(n);
     for( j=0; j<n; j++ )
@@ -36,7 +88,7 @@ void gaussSolver( Matrix<Real> &A, Matrix<Real> &B )
             if( ipiv[j] != 1 )
                 for( k=0; k<n; ++k )
                     if( ipiv[k] == 0 )
-                        if( abs(A[j][k]) >= big )
+                        if( abs(A[j][k]) >= abs(big) )
                         {
                             big = abs(A[j][k]);
                             irow = j;
@@ -55,14 +107,14 @@ void gaussSolver( Matrix<Real> &A, Matrix<Real> &B )
         indxr[i] = irow;
         indxc[i] = icol;
 
-        if( A[icol][icol] == 0.0 )
+        if( abs(A[icol][icol]) == 0.0 )
         {
             cerr << "Singular Matrix!" << endl;
             return;
         }
 
-        pivinv = 1.0 / A[icol][icol];
-        A[icol][icol] = 1.0;
+        pivinv = Type(1) / A[icol][icol];
+        A[icol][icol] = Type(1);
         for( l=0; l<n; ++l )
             A[icol][l] *= pivinv;
         for( l=0; l<m; ++l )
@@ -71,7 +123,7 @@ void gaussSolver( Matrix<Real> &A, Matrix<Real> &B )
             if( ll != icol )
             {
                 dum = A[ll][icol];
-                A[ll][icol] = 0.0;
+                A[ll][icol] = 0;
                 for( l=0; l<n; ++l )
                     A[ll][l] -= A[icol][l]*dum;
                 for( l=0; l<m; ++l )
@@ -87,29 +139,19 @@ void gaussSolver( Matrix<Real> &A, Matrix<Real> &B )
 
 
 /**
- * Linear equations solution by Gauss-Jordan elimination, Ax=B.
+ * Linear equations solution by LU decomposition, Ax=b.
  * A  --->  The n-by-n coefficient matrix(Full Rank);
  * b  --->  The n-by-1 right-hand side vector;
  * x  --->  The n-by-1 solution vector.
  */
-template <typename Real>
-Vector<Real> gaussSolver( const Matrix<Real> &A, const Vector<Real> &b )
+template <typename Type>
+Vector<Type> luSolver( const Matrix<Type> &A, const Vector<Type> &b )
 {
     assert( A.rows() == b.size() );
 
-    int rows = b.size();
-    Vector<Real> x( rows );
-    Matrix<Real> C(A);
-    Matrix<Real> B( rows, 1 );
-    for( int i=0; i<rows; ++i )
-        B[i][0] = b[i];
-
-    gaussSolver( C, B );
-
-    for( int i=0; i<rows; ++i )
-        x[i] = B[i][0];
-
-    return x;
+    LUD<Type> lu;
+    lu.dec( A );
+    return lu.solve( b );
 }
 
 
@@ -119,54 +161,14 @@ Vector<Real> gaussSolver( const Matrix<Real> &A, const Vector<Real> &b )
  * B  --->  The n-by-m right-hand side vector;
  * X  --->  The n-by-m solution vectors.
  */
-template <typename Real>
-Matrix<Real> luSolver( const Matrix<Real> &A, const Matrix<Real> &B )
+template <typename Type>
+Matrix<Type> luSolver( const Matrix<Type> &A, const Matrix<Type> &B )
 {
     assert( A.rows() == B.rows() );
 
-    LUD<Real> lu;
+    LUD<Type> lu;
     lu.dec( A );
     return lu.solve( B );
-}
-
-
-/**
- * Linear equations solution by LU decomposition, Ax=b.
- * A  --->  The n-by-n coefficient matrix(Full Rank);
- * b  --->  The n-by-1 right-hand side vector;
- * x  --->  The n-by-1 solution vector.
- */
-template <typename Real>
-Vector<Real> luSolver( const Matrix<Real> &A, const Vector<Real> &b )
-{
-    assert( A.rows() == b.size() );
-
-    LUD<Real> lu;
-    lu.dec( A );
-    return lu.solve( b );
-}
-
-
-/**
- * Linear equations solution by Cholesky decomposition, AX=B.
- * A  --->  The n-by-n coefficient matrix(Full Rank);
- * B  --->  The n-by-m right-hand side vector;
- * X  --->  The n-by-m solution vectors.
- */
-template <typename Real>
-Matrix<Real> choleskySolver( const Matrix<Real> &A, const Matrix<Real> &B )
-{
-    assert( A.rows() == B.rows() );
-
-    Cholesky<double> cho;
-    cho.dec(A);
-    if( cho.isSpd() )
-        return cho.solve( B );
-    else
-    {
-        cerr << "Factorization was not complete!" << endl;
-        return Matrix<Real>(0,0);
-    }
 }
 
 
@@ -176,21 +178,97 @@ Matrix<Real> choleskySolver( const Matrix<Real> &A, const Matrix<Real> &B )
  * b  --->  The n-by-1 right-hand side vector;
  * x  --->  The n-by-1 solution vector.
  */
-template <typename Real>
-Vector<Real> choleskySolver( const Matrix<Real> &A, const Vector<Real> &b )
+template <typename Type>
+Vector<Type> choleskySolver( const Matrix<Type> &A, const Vector<Type> &b )
 {
     assert( A.rows() == b.size() );
 
-    Cholesky<double> cho;
+    Cholesky<Type> cho;
     cho.dec(A);
     if( cho.isSpd() )
         return cho.solve( b );
     else
     {
         cerr << "Factorization was not complete!" << endl;
-        return Vector<Real>(0);
+        return Vector<Type>(0);
     }
 }
+
+
+/**
+ * Linear equations solution by Cholesky decomposition, AX=B.
+ * A  --->  The n-by-n coefficient matrix(Full Rank);
+ * B  --->  The n-by-m right-hand side vector;
+ * X  --->  The n-by-m solution vectors.
+ */
+template <typename Type>
+Matrix<Type> choleskySolver( const Matrix<Type> &A, const Matrix<Type> &B )
+{
+    assert( A.rows() == B.rows() );
+
+    Cholesky<Type> cho;
+    cho.dec(A);
+    if( cho.isSpd() )
+        return cho.solve( B );
+    else
+    {
+        cerr << "Factorization was not complete!" << endl;
+        return Matrix<Type>(0,0);
+    }
+}
+
+
+/**
+ * Solve the upper triangular system U*x = b.
+ * U  --->  The n-by-n upper triangular matrix(Full Rank);
+ * b  --->  The n-by-1 right-hand side vector;
+ * x  --->  The n-by-1 solution vector.
+*/
+template <typename Type>
+Vector<Type> utSolver( const Matrix<Type> &U, const Vector<Type> &b )
+{
+    int n = b.dim();
+
+    assert( U.rows() == n );
+    assert( U.rows() == U.cols() );
+
+	Vector<Type> x(b);
+	for( int k=n; k >= 1; --k )
+	{
+		x(k) /= U(k,k);
+		for( int i=1; i<k; ++i )
+			x(i) -= x(k) * U(i,k);
+    }
+
+    return x;
+}
+
+
+/**
+ * Solve the lower triangular system L*x = b.
+ * L  --->  The n-by-n lower triangular matrix(Full Rank);
+ * b  --->  The n-by-1 right-hand side vector;
+ * x  --->  The n-by-1 solution vector.
+*/
+template <typename Type>
+Vector<Type> ltSolver( const Matrix<Type> &L, const Vector<Type> &b )
+{
+	int n = b.dim();
+
+    assert( L.rows() == n );
+    assert( L.rows() == L.cols() );
+
+	Vector<Type> x(b);
+	for( int k=1; k <= n; ++k )
+	{
+		x(k) /= L(k,k);
+		for( int i=k+1; i<= n; ++i )
+			x(i) -= x(k) * L(i,k);
+    }
+
+    return x;
+}
+
 
 /**
  * Tridiagonal equations solution by Forward Elimination and Backward Substitution.
@@ -200,9 +278,9 @@ Vector<Real> choleskySolver( const Matrix<Real> &A, const Vector<Real> &b )
  * d  --->  The right-hand side vector;
  * x  --->  The n-by-1 solution vector.
  */
-template <typename Real>
-Vector<Real> febsSolver( const Vector<Real> &a, const Vector<Real> &b,
-                         const Vector<Real> &c, const Vector<Real> &d )
+template <typename Type>
+Vector<Type> febsSolver( const Vector<Type> &a, const Vector<Type> &b,
+                         const Vector<Type> &c, const Vector<Type> &d )
 {
     int n = b.size();
 
@@ -210,8 +288,8 @@ Vector<Real> febsSolver( const Vector<Real> &a, const Vector<Real> &b,
     assert( c.size() == n-1 );
     assert( d.size() == n );
 
-    Real mu = 0;
-    Vector<Real> x(d),
+    Type mu = 0;
+    Vector<Type> x(d),
                  bb(b);
 
     for( int i=0; i<n-1; ++i )

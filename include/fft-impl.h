@@ -1,163 +1,155 @@
+/*
+ * Copyright (c) 2008-2011 Zhang Ming (M. Zhang), zmjerry@163.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 2 or any later version.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. A copy of the GNU General Public License is available at:
+ * http://www.fsf.org/licensing/licenses
+ */
+
+
 /*****************************************************************************
  *                                 fft-impl.h
  *
- * Implementation for C++ interface for FFTW.
+ * Implementation for FFT and IFFT interface.
  *
- * Zhang Ming, 2010-01, Xi'an Jiaotong University.
+ * Zhang Ming, 2010-09, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
 /**
- * Real to complex DFT of 1D signal. If "xn" has N points, "Xk"
- * should has N/2+1 points.
+ * Forward FFT algorithm.
  */
-inline void fft( Vector<double> &xn, Vector< complex<double> > &Xk )
+template<typename Type>
+inline Vector< complex<Type> > fft( const Vector<Type> &xn )
 {
-    fftw_plan r2cP;
-    r2cP = fftw_plan_dft_r2c_1d( xn.dim(), xn.begin(),
-           reinterpret_cast<fftw_complex*>(Xk.begin()),
-           FFTW_ESTIMATE );
-    fftw_execute( r2cP );
-    fftw_destroy_plan( r2cP );
+    return fftr2c( xn );
 }
 
-inline void fft( Vector<float> &xn, Vector< complex<float> > &Xk )
+template<typename Type>
+inline Vector< complex<Type> > fft( const Vector< complex<Type> > &xn )
 {
-    fftwf_plan r2cP;
-    r2cP = fftwf_plan_dft_r2c_1d( xn.dim(), xn.begin(),
-           reinterpret_cast<fftwf_complex*>(Xk.begin()),
-           FFTW_ESTIMATE );
-    fftwf_execute( r2cP );
-    fftwf_destroy_plan( r2cP );
+    return fftc2c( xn );
 }
 
-inline void fft( Vector<long double> &xn, Vector< complex<long double> > &Xk )
+
+/**
+ * Inverse FFT algorithm.
+ */
+template<typename Type>
+inline Vector< complex<Type> > ifft( const Vector< complex<Type> > &Xk )
 {
-    fftwl_plan r2cP;
-    r2cP = fftwl_plan_dft_r2c_1d( xn.dim(), xn.begin(),
-           reinterpret_cast<fftwl_complex*>(Xk.begin()),
-           FFTW_ESTIMATE );
-    fftwl_execute( r2cP );
-    fftwl_destroy_plan( r2cP );
+    return ifftc2c( Xk );
+}
+
+
+/**
+ * Real to complex DFT of 1D signal.
+ */
+template<typename Type>
+inline Vector< complex<Type> > fftr2c( const Vector<Type> &xn )
+{
+    Vector< complex<Type> > Xk( xn.size() );
+
+    if( isPower2(xn.size())  )
+    {
+        FFTMR<Type> dft;
+        dft.fft( xn, Xk );
+    }
+    else
+    {
+        FFTPF<Type> dft;
+        dft.fft( xn, Xk );
+    }
+
+    return Xk;
 }
 
 
 /**
  * Complex to complex DFT of 1D signal.
  */
-inline void fft( Vector< complex<double> > &xn, Vector< complex<double> > &Xk )
+template<typename Type>
+inline Vector< complex<Type> > fftc2c( const Vector< complex<Type> > &xn )
 {
-    fftw_plan c2cP;
-    c2cP = fftw_plan_dft_1d( xn.dim(),
-           reinterpret_cast<fftw_complex*>(xn.begin()),
-           reinterpret_cast<fftw_complex*>(Xk.begin()),
-           FFTW_FORWARD, FFTW_ESTIMATE );
-    fftw_execute( c2cP );
-    fftw_destroy_plan( c2cP );
-}
+    Vector< complex<Type> > Xk( xn.size() );
 
-inline void fft( Vector< complex<float> > &xn, Vector< complex<float> > &Xk )
-{
-    fftwf_plan c2cP;
-    c2cP = fftwf_plan_dft_1d( xn.dim(),
-           reinterpret_cast<fftwf_complex*>(xn.begin()),
-           reinterpret_cast<fftwf_complex*>(Xk.begin()),
-           FFTW_FORWARD, FFTW_ESTIMATE );
-    fftwf_execute( c2cP );
-    fftwf_destroy_plan( c2cP );
-}
+    if( isPower2(xn.size())  )
+    {
+        for( int i=0; i<xn.size(); ++i )
+            Xk[i] = xn[i];
+        FFTMR<Type> dft;
+        dft.fft( Xk );
+    }
+    else
+    {
+        FFTPF<Type> dft;
+        dft.fft( xn, Xk );
+    }
 
-inline void fft( Vector< complex<long double> > &xn, Vector< complex<long double> > &Xk )
-{
-    fftwl_plan c2cP;
-    c2cP = fftwl_plan_dft_1d( xn.dim(),
-           reinterpret_cast<fftwl_complex*>(xn.begin()),
-           reinterpret_cast<fftwl_complex*>(Xk.begin()),
-           FFTW_FORWARD, FFTW_ESTIMATE );
-    fftwl_execute( c2cP );
-    fftwl_destroy_plan( c2cP );
+    return Xk;
 }
 
 
 /**
- * Complex to real IDFT of 1D. If "xn" has N points, "Xk" should
- * has N/2+1 points.
+ * Complex to real IDFT of 1D signal.
  */
-inline void ifft( Vector< complex<double> > &Xk, Vector<double> &xn )
+template<typename Type>
+inline Vector<Type> ifftc2r( const Vector< complex<Type> > &Xk )
 {
-    fftw_plan c2rP;
-    c2rP = fftw_plan_dft_c2r_1d( xn.dim(),
-           reinterpret_cast<fftw_complex*>(Xk.begin()),
-           xn.begin(), FFTW_ESTIMATE );
-    fftw_execute( c2rP );
-    fftw_destroy_plan( c2rP );
+    Vector<Type> xn( Xk.size() );
 
-    xn /= double( xn.dim() );
-}
+    if( isPower2(xn.size())  )
+    {
+        Vector< complex<Type> > tmp( Xk );
+        FFTMR<Type> dft;
+        dft.ifft( tmp, xn );
+    }
+    else
+    {
+        FFTPF<Type> dft;
+        dft.ifft( Xk, xn );
+    }
 
-inline void ifft( Vector< complex<float> > &Xk, Vector<float> &xn )
-{
-    fftwf_plan c2rP;
-    c2rP = fftwf_plan_dft_c2r_1d( xn.dim(),
-           reinterpret_cast<fftwf_complex*>(Xk.begin()),
-           xn.begin(), FFTW_ESTIMATE );
-    fftwf_execute( c2rP );
-    fftwf_destroy_plan( c2rP );
-
-    xn /= float( xn.dim() );
-}
-
-inline void ifft( Vector< complex<long double> > &Xk, Vector<long double> &xn )
-{
-    fftwl_plan c2rP;
-    c2rP = fftwl_plan_dft_c2r_1d( xn.dim(),
-           reinterpret_cast<fftwl_complex*>(Xk.begin()),
-           xn.begin(), FFTW_ESTIMATE );
-    fftwl_execute( c2rP );
-    fftwl_destroy_plan( c2rP );
-
-    xn /= (long double)( xn.dim() );
+    return xn;
 }
 
 
 /**
- * Complex to complex IDFT of 1D.
+ * Complex to complex IDFT of 1D signal.
  */
-inline void ifft( Vector< complex<double> > &Xk, Vector< complex<double> > &xn )
+template<typename Type>
+inline Vector< complex<Type> > ifftc2c( const Vector< complex<Type> > &Xk )
 {
-    fftw_plan c2cP;
-    c2cP = fftw_plan_dft_1d( xn.dim(),
-           reinterpret_cast<fftw_complex*>(Xk.begin()),
-           reinterpret_cast<fftw_complex*>(xn.begin()),
-           FFTW_BACKWARD, FFTW_ESTIMATE );
-    fftw_execute( c2cP );
-    fftw_destroy_plan( c2cP );
+    Vector< complex<Type> > xn( Xk.size() );
 
-    xn /= complex<double>( xn.dim(), 0.0 );
-}
+    if( isPower2(xn.size())  )
+    {
+        for( int i=0; i<xn.size(); ++i )
+            xn[i] = Xk[i];
+        FFTMR<Type> dft;
+        dft.ifft( xn );
+    }
+    else
+    {
+        FFTPF<Type> dft;
+        dft.ifft( Xk, xn );
+    }
 
-inline void ifft( Vector< complex<float> > &Xk, Vector< complex<float> > &xn )
-{
-    fftwf_plan c2cP;
-    c2cP = fftwf_plan_dft_1d( xn.dim(),
-           reinterpret_cast<fftwf_complex*>(Xk.begin()),
-           reinterpret_cast<fftwf_complex*>(xn.begin()),
-           FFTW_BACKWARD, FFTW_ESTIMATE );
-    fftwf_execute( c2cP );
-    fftwf_destroy_plan( c2cP );
-
-    xn /= complex<float>( xn.dim(), 0.0 );
-}
-
-inline void ifft( Vector< complex<long double> > &Xk, Vector< complex<long double> > &xn )
-{
-    fftwl_plan c2cP;
-    c2cP = fftwl_plan_dft_1d( xn.dim(),
-           reinterpret_cast<fftwl_complex*>(Xk.begin()),
-           reinterpret_cast<fftwl_complex*>(xn.begin()),
-           FFTW_BACKWARD, FFTW_ESTIMATE );
-    fftwl_execute( c2cP );
-    fftwl_destroy_plan( c2cP );
-
-    xn /= complex<long double>( xn.dim(), 0.0 );
+    return xn;
 }

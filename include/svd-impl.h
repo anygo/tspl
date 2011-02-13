@@ -1,9 +1,34 @@
+/*
+ * Copyright (c) 2008-2011 Zhang Ming (M. Zhang), zmjerry@163.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 2 or any later version.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details. A copy of the GNU General Public License is available at:
+ * http://www.fsf.org/licensing/licenses
+ */
+
+
 /*****************************************************************************
  *                               svd-impl.h
  *
  * Implementation for SVD class.
  *
- * Zhang Ming, 2010-01, Xi'an Jiaotong University.
+ * Zhang Ming, 2010-01 (revised 2010-08), Xi'an Jiaotong University.
  *****************************************************************************/
 
 
@@ -11,7 +36,7 @@
  * constructor and destructor
  */
 template<typename Real>
-SVD<Real>::SVD() : m(0), n(0)
+SVD<Real>::SVD()
 {
 }
 
@@ -27,19 +52,22 @@ SVD<Real>::~SVD()
 template <typename Real>
 void SVD<Real>::dec( const Matrix<Real> &A )
 {
-    m = A.rows();
-    n = A.cols();
-    if( m < n )
-        mLTn = true;
-    else
-        mLTn = false;
+    int m = A.rows(),
+        n = A.cols(),
+        p = min( m, n );
 
-    if( !mLTn )
-        decomposition( A );
+    U = Matrix<Real>( m, p );
+    V = Matrix<Real>( n, p );
+    S = Vector<Real>( p );
+    if( m >= n )
+    {
+        Matrix<Real> B(A);
+        decomposition( B, U, S, V );
+    }
     else
     {
-        Matrix<Real> At( transpose( A ) );
-        decomposition( At );
+        Matrix<Real> B( trT( A ) );
+        decomposition( B, V, S, U );
     }
 }
 
@@ -48,15 +76,11 @@ void SVD<Real>::dec( const Matrix<Real> &A )
  * Making singular decomposition of m >= n.
  */
 template <typename Real>
-void SVD<Real>::decomposition( const Matrix<Real> &A )
+void SVD<Real>::decomposition( Matrix<Real> &B, Matrix<Real> &U,
+                               Vector<Real> &S, Matrix<Real> &V )
 {
-    m = A.rows();
-    n = A.cols();
-
-    Matrix<Real> M(A);
-    U = Matrix<Real>( m, n );
-    V = Matrix<Real>( n, n );
-    s = Vector<Real>( n );
+    int m = B.rows(),
+        n = B.cols();
 
     Vector<Real> e(n);
     Vector<Real> work(m);
@@ -80,43 +104,43 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
             // Compute the transformation for the k-th column and
             // place the k-th diagonal in s[k].
             // Compute 2-norm of k-th column without under/overflow.
-            s[k] = 0;
+            S[k] = 0;
             for( i=k; i<m; ++i )
-                 s[k] = hypot( s[k], M[i][k] );
+                 S[k] = hypot( S[k], B[i][k] );
 
-            if( s[k] != 0 )
+            if( S[k] != 0 )
             {
-                if( M[k][k] < 0 )
-                    s[k] = -s[k];
+                if( B[k][k] < 0 )
+                    S[k] = -S[k];
 
                 for( i=k; i<m; ++i )
-                    M[i][k] /= s[k];
-                M[k][k] += 1;
+                    B[i][k] /= S[k];
+                B[k][k] += 1;
             }
-            s[k] = -s[k];
+            S[k] = -S[k];
         }
 
         for( j=k+1; j<n; ++j )
         {
-            if( (k < nct) && ( s[k] != 0 ) )
+            if( (k < nct) && ( S[k] != 0 ) )
             {
                 // apply the transformation
                 Real t = 0;
                 for( i=k; i<m; ++i )
-                    t += M[i][k] * M[i][j];
+                    t += B[i][k] * B[i][j];
 
-                t = -t / M[k][k];
+                t = -t / B[k][k];
                 for( i=k; i<m; ++i )
-                    M[i][j] += t*M[i][k];
+                    B[i][j] += t*B[i][k];
             }
-            e[j] = M[k][j];
+            e[j] = B[k][j];
         }
 
         // Place the transformation in U for subsequent back
         // multiplication.
         if( wantu & (k < nct) )
             for( i=k; i<m; ++i )
-                U[i][k] = M[i][k];
+                U[i][k] = B[i][k];
 
         if( k < nrt )
         {
@@ -146,13 +170,13 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
 
                 for( j=k+1; j<n; ++j )
                     for( i=k+1; i<m; ++i )
-                        work[i] += e[j] * M[i][j];
+                        work[i] += e[j] * B[i][j];
 
                 for( j=k+1; j<n; ++j )
                 {
                     Real t = -e[j]/e[k+1];
                     for( i=k+1; i<m; ++i )
-                        M[i][j] += t * work[i];
+                        B[i][j] += t * work[i];
                 }
             }
 
@@ -168,12 +192,12 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
     int p = n;
 
     if( nct < n )
-        s[nct] = M[nct][nct];
+        S[nct] = B[nct][nct];
     if( m < p )
-        s[p-1] = 0;
+        S[p-1] = 0;
 
     if( nrt+1 < p )
-        e[nrt] = M[nrt][p-1];
+        e[nrt] = B[nrt][p-1];
     e[p-1] = 0;
 
     // if required, generate U
@@ -187,7 +211,7 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
         }
 
         for( k=nct-1; k>=0; --k )
-            if( s[k] != 0 )
+            if( S[k] != 0 )
             {
                 for( j=k+1; j<n; ++j )
                 {
@@ -260,7 +284,7 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
             if( k == -1 )
                 break;
 
-            if( abs(e[k]) <= eps*( abs(s[k])+abs(s[k+1]) ) )
+            if( abs(e[k]) <= eps*( abs(S[k])+abs(S[k+1]) ) )
             {
                 e[k] = 0;
                 break;
@@ -280,9 +304,9 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
                 Real t = ( (ks != p) ? abs(e[ks]) : 0 ) +
                          ( (ks != k+1) ? abs(e[ks-1]) : 0 );
 
-                if( abs(s[ks]) <= eps*t )
+                if( abs(S[ks]) <= eps*t )
                 {
-                    s[ks] = 0;
+                    S[ks] = 0;
                     break;
                 }
             }
@@ -300,7 +324,7 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
         k++;
 
         // Perform the task indicated by kase.
-        switch(kase)
+        switch( kase )
         {
             // deflate negligible s(p)
             case 1:
@@ -310,10 +334,10 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
 
                 for( j=p-2; j>=k; --j )
                 {
-                    Real t = hypot( s[j], f );
-                    Real cs = s[j] / t;
+                    Real t = hypot( S[j], f );
+                    Real cs = S[j] / t;
                     Real sn = f / t;
-                    s[j] = t;
+                    S[j] = t;
 
                     if( j != k )
                     {
@@ -340,10 +364,10 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
 
                 for( j=k; j<p; ++j )
                 {
-                    Real t = hypot( s[j], f );
-                    Real cs = s[j] / t;
+                    Real t = hypot( S[j], f );
+                    Real cs = S[j] / t;
                     Real sn = f / t;
-                    s[j] = t;
+                    S[j] = t;
                     f = -sn * e[j];
                     e[j] = cs * e[j];
 
@@ -363,12 +387,12 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
             {
                 // calculate the shift
                 Real scale = max( max( max( max(
-                             abs(s[p-1]), abs(s[p-2]) ), abs(e[p-2]) ),
-                             abs(s[k]) ), abs(e[k]) );
-                Real sp = s[p-1] / scale;
-                Real spm1 = s[p-2] / scale;
+                             abs(S[p-1]), abs(S[p-2]) ), abs(e[p-2]) ),
+                             abs(S[k]) ), abs(e[k]) );
+                Real sp = S[p-1] / scale;
+                Real spm1 = S[p-2] / scale;
                 Real epm1 = e[p-2] / scale;
-                Real sk = s[k] / scale;
+                Real sk = S[k] / scale;
                 Real ek = e[k] / scale;
                 Real b = ( (spm1+sp)*(spm1-sp) + epm1*epm1 ) / 2.0;
                 Real c = (sp*epm1) * (sp*epm1);
@@ -393,10 +417,10 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
                     if( j != k )
                         e[j-1] = t;
 
-                    f = cs*s[j] + sn*e[j];
-                    e[j] = cs*e[j] - sn*s[j];
-                    g = sn * s[j+1];
-                    s[j+1] = cs * s[j+1];
+                    f = cs*S[j] + sn*e[j];
+                    e[j] = cs*e[j] - sn*S[j];
+                    g = sn * S[j+1];
+                    S[j+1] = cs * S[j+1];
 
                     if( wantv )
                         for( i=0; i<n; ++i )
@@ -409,9 +433,9 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
                     t = hypot( f, g );
                     cs = f / t;
                     sn = g / t;
-                    s[j] = t;
-                    f = cs*e[j] + sn*s[j+1];
-                    s[j+1] = -sn*e[j] + cs*s[j+1];
+                    S[j] = t;
+                    f = cs*e[j] + sn*S[j+1];
+                    S[j+1] = -sn*e[j] + cs*S[j+1];
                     g = sn * e[j+1];
                     e[j+1] = cs * e[j+1];
 
@@ -432,9 +456,9 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
             case 4:
             {
                 // Make the singular values positive.
-                if( s[k] <= 0 )
+                if( S[k] <= 0 )
                 {
-                    s[k] = ( s[k] < 0 ) ? -s[k] : 0;
+                    S[k] = ( S[k] < 0 ) ? -S[k] : 0;
                     if( wantv )
                         for( i=0; i<=pp; ++i )
                             V[i][k] = -V[i][k];
@@ -443,12 +467,12 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
                 // Order the singular values.
                 while( k < pp )
                 {
-                    if( s[k] >= s[k+1] )
+                    if( S[k] >= S[k+1] )
                         break;
 
-                    Real t = s[k];
-                    s[k] = s[k+1];
-                    s[k+1] = t;
+                    Real t = S[k];
+                    S[k] = S[k+1];
+                    S[k+1] = t;
 
                     if( wantv && ( k < n-1 ) )
                         for( i=0; i<n; ++i )
@@ -474,10 +498,7 @@ void SVD<Real>::decomposition( const Matrix<Real> &A )
 template<typename Real>
 inline Matrix<Real> SVD<Real>::getU() const
 {
-    if( !mLTn )
-        return U;
-    else
-        return V;
+    return U;
 }
 
 
@@ -487,9 +508,10 @@ inline Matrix<Real> SVD<Real>::getU() const
 template<typename Real>
 inline Matrix<Real> SVD<Real>::getSM()
 {
-    Matrix<Real> tmp( n, n );
-    for( int i=0; i<n; ++i )
-        tmp[i][i] = s[i];
+    int N = S.size();
+    Matrix<Real> tmp( N, N );
+    for( int i=0; i<N; ++i )
+        tmp[i][i] = S[i];
 
     return tmp;
 }
@@ -501,7 +523,7 @@ inline Matrix<Real> SVD<Real>::getSM()
 template<typename Real>
 inline Vector<Real> SVD<Real>::getSV() const
 {
-    return s;
+    return S;
 }
 
 
@@ -511,10 +533,7 @@ inline Vector<Real> SVD<Real>::getSV() const
 template<typename Real>
 inline Matrix<Real> SVD<Real>::getV() const
 {
-    if( !mLTn )
-        return V;
-    else
-        return U;
+    return V;
 }
 
 
@@ -524,7 +543,7 @@ inline Matrix<Real> SVD<Real>::getV() const
 template <typename Real>
 inline Real SVD<Real>::norm2() const
 {
-    return s[0];
+    return S[0];
 }
 
 
@@ -534,7 +553,7 @@ inline Real SVD<Real>::norm2() const
 template <typename Real>
 inline Real SVD<Real>::cond() const
 {
-    return ( s[0] / s[min(m,n)-1] );
+    return ( S[0] / S(S.size()) );
 }
 
 
@@ -544,12 +563,12 @@ inline Real SVD<Real>::cond() const
 template <typename Real>
 int SVD<Real>::rank()
 {
-    double eps = pow(2.0,-52.0);
-    double tol = m * s[0] * eps;
+    int N = S.size();
+    double tol = N * S[0] * EPS;
     int r = 0;
 
-    for( int i=0; i<s.dim(); ++i )
-        if( s[i] > tol )
+    for( int i=0; i<N; ++i )
+        if( S[i] > tol )
             r++;
 
     return r;
