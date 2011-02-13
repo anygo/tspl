@@ -14,7 +14,7 @@
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
 int const N = 10;

@@ -13,7 +13,7 @@
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
 int main()

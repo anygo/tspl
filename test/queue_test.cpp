@@ -13,7 +13,7 @@
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
 struct Student
@@ -22,7 +22,7 @@ struct Student
     string  stuName;
     string  department;
 
-    Student( int number = 0, const string &name = "Tom&Jerry",
+    Student( int number = 0, const string &name = "Tom & Jerry",
              const string &dpt = "Information" )
     : stuNum(number), stuName(name), department(dpt)
     { }
@@ -35,9 +35,9 @@ int main()
     Student stu;
     Queue<Student> q;
 
-    q.enqueue( Student(11, "ZhangMing", "Information") );
-    q.enqueue( Student(16, "HuZhaoJun") );
-    q.enqueue( Student(11, "ZhangYuYang", "AutoControl") );
+    q.enqueue( Student(11, "Zhang Ming", "Information") );
+    q.enqueue( Student(16, "Hu Zhaojun") );
+    q.enqueue( Student(11, "Zhang Yuyang", "AutoControl") );
     q.enqueue( Student() );
 
 

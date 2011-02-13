@@ -12,21 +12,24 @@
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
+
+
+typedef double  Type;
 
 
 int main()
 {
-    double  p1 = 1,
+    Type    p1 = 1,
             p2 = 2,
             lower = 0,
             upper = PI,
             I = 0;
-    Func<double> f( p1, p2 );
+    Func<Type> f( p1, p2 );
 
     I = romberg( f, lower, upper );
     cout << "The integral of function 'f' from " << lower <<
-            " to " << upper << " is:" << endl << I << endl << endl;
+            " to " << upper << " is :   " << I << endl << endl;
 
     return 0;
 }

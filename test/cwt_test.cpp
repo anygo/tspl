@@ -10,19 +10,18 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include <cwt.h>
 #include <vectormath.h>
-#include <utilities.h>
 #include <statistics.h>
 #include <timing.h>
+#include <cwt.h>
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
-const int Ls = 1000;
-const double fs = 1000.0;
+const   int     Ls = 1000;
+const   double  fs = 1000.0;
 
 
 int main()
@@ -39,7 +38,7 @@ int main()
 	wavelet.setScales( fs, fs/Ls, fs/2 );
 	Timing cnt;
 	double runtime = 0.0;
-	cout << "Taking contineous wavelet transform(Morlet)." << endl;
+	cout << "Taking continuous wavelet transform(Morlet)." << endl;
 	cnt.start();
 	coefs = wavelet.cwtC(st);
 	cnt.stop();
@@ -47,7 +46,7 @@ int main()
 	cout << "The running time = " << runtime << " (ms)" << endl << endl;
 
 	/******************************** [ ICWT ] *******************************/
-	cout << "Taking inverse contineous wavelet transform." << endl;
+	cout << "Taking inverse continuous wavelet transform." << endl;
 	cnt.start();
 	Vector<double> xt = wavelet.icwtC(coefs);
 	cnt.stop();
@@ -66,9 +65,9 @@ int main()
 
 	/******************************** [ CWT ] ********************************/
 	CWT<float> waveletf("mexiHat");
-	waveletf.setScales( fs, fs/Ls, fs/2, float(0.25) );
+	waveletf.setScales( float(fs), float(fs/Ls), float(fs/2), float(0.25) );
 	runtime = 0.0;
-	cout << "Taking contineous wavelet transform(Mexican Hat)." << endl;
+	cout << "Taking continuous wavelet transform(Mexican Hat)." << endl;
 	cnt.start();
 	Matrix<float> coefsf = waveletf.cwtR(stf);
 	cnt.stop();
@@ -76,7 +75,7 @@ int main()
 	cout << "The running time = " << runtime << " (ms)" << endl << endl;
 
 	/******************************** [ ICWT ] *******************************/
-	cout << "Taking inverse contineous wavelet transform." << endl;
+	cout << "Taking inverse continuous wavelet transform." << endl;
 	cnt.start();
 	Vector<float> xtf = waveletf.icwtR(coefsf);
 	cnt.stop();

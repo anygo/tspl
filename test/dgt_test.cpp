@@ -10,21 +10,21 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include <dgt.h>
 #include <vectormath.h>
 #include <timing.h>
+#include <dgt.h>
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
-const   int Fs = 1000;
-const   int Ls = 1000;
-const   int Lg = 80;
-const   int N  = 40;
-const   int dM = 10;      // over sampling ratio is N/dM
-typedef     double   Type;
+typedef double  Type;
+const   int     Fs = 1000;
+const   int     Ls = 10000;
+const   int     Lg = 80;
+const   int     N  = 40;
+const   int     dM = 10;      // over sampling ratio is N/dM
 
 
 int main()
@@ -71,7 +71,7 @@ int main()
 	runtime = cnt.read();
 	cout << "The running time = " << runtime << " (ms)" << endl << endl;
 
-	cout <<"The relative erroris : norm(s-x) / norm(s) = "
+	cout <<"The relative error : norm(s-x) / norm(s) = "
 	     << norm(st-xt)/norm(st) << endl << endl;
 
 	return 0;

@@ -10,32 +10,38 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
+#include <iomanip>
 #include <window.h>
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
+
+
+typedef double  Type;
 
 
 int main()
 {
     int N = 5;
+    Type A = 1.0;
 
-    cout << "Rectangle window : " << rectangle(N) << endl << endl;
-    cout << "Bartlett window : " << bartlett(N) << endl << endl;
-    cout << "Hanning window : " << hanning(N) << endl << endl;
-    cout << "Hamming window : " << hamming(N) << endl << endl;
-    cout << "Blackman window : " << blackman(N) << endl << endl;
-    cout << "Kaiser window : " << kaiser(N,8/PI) << endl << endl;
-    cout << "Gauss window : " << gauss(N) << endl << endl;
+    cout << setiosflags(ios::fixed) << setprecision(4);
+    cout << "Rectangle window : " << rectangle(N,A) << endl;
+    cout << "Bartlett window : " << bartlett(N,A) << endl;
+    cout << "Hanning window : " << hanning(N,A) << endl;
+    cout << "Hamming window : " << hamming(N,A) << endl;
+    cout << "Blackman window : " << blackman(N,A) << endl;
+    cout << "Kaiser window : " << kaiser(N,Type(8/PI),A) << endl;
+    cout << "Gauss window : " << gauss(N,Type(2.5),A) << endl;
 
-    cout << "Rectangle window : " << window("Rectangle",N) << endl << endl;
-    cout << "Bartlett window : " << window("Bartlett",N) << endl << endl;
-    cout << "Hanning window : " << window("Hanning",N) << endl << endl;
-    cout << "Hamming window : " << window("Hamming",N) << endl << endl;
-    cout << "Blackman window : " << window("Blackman",N) << endl << endl;
-    cout << "Kaiser window : " << window("Kaiser",N, 8/PI) << endl << endl;
-    cout << "Gauss window : " << window("Gauss",N,2.5) << endl;
+    cout << "Rectangle window : " << window("Rectangle",N,A) << endl;
+    cout << "Bartlett window : " << window("Bartlett",N,A) << endl;
+    cout << "Hanning window : " << window("Hanning",N,A) << endl;
+    cout << "Hamming window : " << window("Hamming",N,A) << endl;
+    cout << "Blackman window : " << window("Blackman",N,A) << endl;
+    cout << "Kaiser window : " << window("Kaiser",N, Type(8/PI),A) << endl;
+    cout << "Gauss window : " << window("Gauss",N,Type(2.5),A) << endl;
 
     return 0;
 }

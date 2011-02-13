@@ -10,12 +10,12 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include <bwt.h>
 #include <timing.h>
+#include <bwt.h>
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
 const int Ls = 100;

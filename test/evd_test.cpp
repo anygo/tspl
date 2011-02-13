@@ -3,47 +3,65 @@
  *
  * EVD class testing.
  *
- * Zhang Ming, 2010-01, Xi'an Jiaotong University.
+ * Zhang Ming, 2010-01 (revised 2010-12), Xi'an Jiaotong University.
  *****************************************************************************/
 
 
 #define BOUNDS_CHECK
 
 #include <iostream>
+#include <iomanip>
 #include <evd.h>
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
-const int N = 4;
+typedef double  Type;
+const   int     N = 2;
 
 
 int main()
 {
-	Matrix<double> A(N,N);
+	Matrix<Type> B(N,N);
+    B[0][0] = 3.0;	B[0][1] = -2.0;
+	B[1][0] = -2.0;	B[1][1] = 4.0;
 
-	A[0][0] = 3.0;	A[0][1] = -2.0;	A[0][2] = -0.9;     A[0][3] = 0.0;
-	A[1][0] = -2.0;	A[1][1] = 4.0;	A[1][2] = 1.0;      A[1][3] = 0.0;
-	A[2][0] = 0.0;	A[2][1] = 0.0;	A[2][2] = -1.0;     A[2][3] = 0.0;
-	A[3][0] = -0.5;	A[3][1] = -0.5;	A[3][2] = 0.1;      A[3][3] = 1.0;
+    Matrix<Type> A(2*N,2*N), D, V;
+    Matrix<complex<Type> > cA(2*N,2*N), cD, cV;
+    for( int i=0; i<N; ++i )
+        for( int j=0; j<N; ++j )
+        {
+            A[i][j]        = B[i][j];
+            A[i][j+N]      = -B[j][i];
+            A[i+N][j]      = B[j][i];
+            A[i+N][j+N]    = B[i][j];
+        }
+//    A = B;
+    cA = complexMatrix(A);
+    cout << setiosflags(ios::fixed) << setprecision(2);
+    cout << "The original matrix A : " << A << endl;
 
-	EVD<double> eig;
+	EVD<Type> eig;
 	eig.dec(A);
-
-	Matrix<double> D = eig.getD();
-	Matrix<double> V = eig.getV();
-
-	cout << "The original matrix A : " << A << endl;
-	cout << "The eigenvalue matrix D : " << D << endl;
-	cout << "The eigenvectors V : " << V << endl;
-	cout << "THe real part of the eigenvalues Dr: "
-	     << eig.getRealEigenvalues() << endl;
-	cout << "The imaginary part of the eigenvalues Di: "
-	     << eig.getImagEigenvalues() << endl;
-	cout << "The norm of error matrix between A * V and V * D : "
-	     << norm( prod(A,V)-prod(V,D) ) << endl << endl;
+	if( !eig.isComplex() )
+	{
+	    V = eig.getV();
+	    D = diag(eig.getD());
+        cout << "The eigenvectors matrix V : " << V << endl;
+        cout << "The eigenvalue D : " << D << endl;
+        cout << "The V'*V : " << trMult(V,V) << endl;
+        cout << "The A*V - V*D : " << A*V - V*D << endl;
+	}
+	else
+	{
+	    cV = eig.getCV();
+	    cD = diag(eig.getCD());
+        cout << "The complex eigenvectors matrix V : " << cV << endl;
+        cout << "The complex eigenvalue D : " << cD << endl;
+        cout << "The A*V - V*D : " << cA*cV - cV*cD << endl;
+	}
 
 	return 0;
 }

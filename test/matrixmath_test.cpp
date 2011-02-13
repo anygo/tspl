@@ -1,5 +1,5 @@
 /*****************************************************************************
- *                             vectormath_test.cpp
+ *                             matrixmath_test.cpp
  *
  * Math functions of matrix testing.
  *
@@ -10,23 +10,27 @@
 #define BOUNDS_CHECK
 
 #include <iostream>
-#include <utilities.h>
+#include <iomanip>
 #include <matrixmath.h>
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
+
+
+typedef double  Type;
 
 
 int main()
 {
     int N = 9;
-	double  a = 0, b = 2*PI;
-	Vector<double> array = linspace( a, b, N );
+	Type  a = 0, b = 2*PI;
+	Vector<Type> array = linspace( a, b, N );
 
-	Matrix<double> x( 3, 3, array );
+	Matrix<Type> x( 3, 3, array );
+
+	cout << setiosflags(ios::fixed) << setprecision(4);
 	cout << x << endl;
-
 	cout << "sin of x : " << sin(x) << endl;
 	cout << "cos of x : "<< cos(x) << endl;
 	cout << "tan of x : " << tan(x) << endl;
@@ -43,17 +47,6 @@ int main()
 	cout << "pow of x : " << pow(x,x) << endl;
 	cout << "pow of x : " << pow(x,a) << endl;
 	cout << "pow of x : " << pow(a,x) << endl;
-
-    Vector< complex<double> > carray(N);
-    for( int i=0; i<N; ++i )
-        carray[i] = complex<float>( sin(array[i]), cos(array[i]) );
-
-    Matrix< complex<double> > cm( 3, 3, carray );
-    cout << "Complex vector cm : " << cm << endl;
-    cout << "Absolute of cm : " << abs(cm) << endl;
-    cout << "Angle of cm : " << arg(cm) << endl;
-    cout << "Real part of cm : " << real(cm) << endl;
-    cout << "Imaginary part of cm : " << imag(cm) << endl;
 
 	return 0;
 }

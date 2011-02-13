@@ -1,60 +1,66 @@
 /*****************************************************************************
  *                               fft_test.cpp
  *
- * FFT interface testing.
+ * FFT test.
  *
- * Zhang Ming, 2010-01, Xi'an Jiaotong University.
+ * Zhang Ming, 2010-09, Xi'an Jiaotong University.
  *****************************************************************************/
 
 
-#define BOUNDS_CHECK
-
 #include <iostream>
-#include <complex>
+#include <cstdlib>
+#include <vectormath.h>
 #include <fft.h>
 
 
 using namespace std;
-using namespace itlab;
+using namespace splab;
 
 
-const   int     N = 7;
-typedef long double   Type;
+typedef double  Type;
+const   int     MINLEN = 1;
+const   int     MAXLEN = 1000;
+const   int     STEP   = 10;
 
 
 int main()
 {
-    // complex to complex dft test...
-    Vector< complex<Type> > xn( N );
-    Vector< complex<Type> > yn( N );
-    Vector< complex<Type> > Xk( N );
+	Vector< complex<Type> >  sn, Rk, Sk, xn;
+	Vector<Type> rn, tn;
 
-    for( int i=0; i<N; ++i )
-    {
-        Type theta = Type( 2*PI * i / N );
-        xn[i] = complex<Type>( cos(theta), sin(theta) );
-    }
-    cout << "xn:   " << xn << endl << endl;
+    cout << "forward transform: complex to complex." << endl;
+	cout << "inverse transform: complex to complex." << endl << endl;
+	cout << "signal length" << "\t" << "mean(abs((sn-xn))" << endl;
+	for( int len=MINLEN; len<MAXLEN; len+=STEP )
+	{
+	    sn.resize(len);
+	    for( int i=0; i<len; ++i )
+            sn[i] = complex<Type>( rand()%10, rand()%10 );
 
-    fft( xn, Xk );
-    cout << "Xk=fft(xn):   " << Xk << endl << endl;
-    ifft( Xk, yn );
-    cout << "yn=ifft(Xk):   " << yn << endl << endl;
+        Sk = fftc2c( sn );
+        xn = ifftc2c( Sk );
+//        Sk = fft( sn );
+//        xn = ifft( Sk );
+        cout << "    " << len << "\t\t" << "  " << sum(abs(sn-xn))/len << endl;
+	}
+    cout << endl << endl;
 
-    // real to complex and complex to real dft test...
-    Vector<Type> sn(N);
-    Vector< complex<Type> > Sk( N/2+1 );
-    for( int i=0; i<N; ++i )
-    {
-        Type theta = Type( 2*PI * i / N );
-        sn[i] = sin(theta);
-    }
-    cout << "sn:   " << sn << endl;
+    cout << "forward transform: real to complex ." << endl;
+	cout << "inverse transform: complex to real." << endl << endl;
+	cout << "signal length" << "\t" << "mean(abs((rn-tn))" << endl;
+    for( int len=MINLEN; len<MAXLEN; len+=STEP )
+	{
+	    rn.resize(len);
+	    for( int i=0; i<len; ++i )
+            rn[i] = rand()%10;
 
-    fft( sn, Sk );
-    cout << "Sk=fft(sn):   " << Sk << endl << endl;
-    ifft( Sk, sn );
-    cout << "sn=ifft(Sk):   " << sn << endl;
+        Rk = fftr2c( rn );
+        tn = ifftc2r( Rk );
+//        Rk = fft( rn );
+//        tn = real( ifft(Rk) );
+        cout << "    " << len << "\t\t" << "  " << sum(abs(rn-tn))/len << endl;
+	}
+	cout << endl;
 
-    return 0;
+	return 0;
 }
